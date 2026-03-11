@@ -9,8 +9,10 @@ function init() {
   renderHeroBgPicker();
   initEvents();
 
-  // Set browser toggle button to active by default (browser is open)
+  // Set initial button states based on default state
   document.getElementById('browserToggle').classList.add('active');
+  document.getElementById('outlinesToggle').classList.add('active');
+  document.getElementById('dummyToggle').classList.add('active');
 }
 
 document.addEventListener('DOMContentLoaded', init);

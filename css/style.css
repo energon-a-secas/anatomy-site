@@ -154,7 +154,25 @@ body {
   transition: background var(--dur);
 }
 .browser-item.active .browser-dot { background: var(--accent); }
-.browser-item.missing { opacity: 0.3; pointer-events: none; }
+.browser-item.missing { 
+  opacity: 0.4; 
+  cursor: pointer;
+  pointer-events: auto;
+}
+.browser-item.missing:hover { 
+  opacity: 0.7; 
+  background: var(--surface-2);
+}
+.browser-switch-hint {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: var(--accent);
+  opacity: 0.6;
+  transition: opacity var(--dur);
+}
+.browser-item.missing:hover .browser-switch-hint {
+  opacity: 1;
+}
 
 /* ── Mockup area ─────────────────────────────────────────────────────────── */
 .mockup-area {
@@ -233,11 +251,20 @@ body {
   background: rgba(217,70,239,0.07);
   border: 1px solid rgba(217,70,239,0.2);
   border-radius: var(--radius-sm); padding: 8px 10px;
+  margin-bottom: 10px;
 }
 .tt-tip-wrap .tt-section-label { color: var(--accent); margin-bottom: 4px; }
 .tt-tip {
   font-size: 0.75rem; color: rgba(255,255,255,0.75);
   line-height: 1.5; font-style: italic;
+}
+.tt-frameworks-wrap { margin-top: 10px; }
+.tt-frameworks { display: flex; flex-wrap: wrap; gap: 4px; }
+.tt-framework-pill {
+  font-size: 0.68rem; padding: 3px 8px;
+  background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
+  border-radius: 99px; color: #60a5fa;
+  font-weight: 500;
 }
 
 /* ── Wireframe: core ─────────────────────────────────────────────────────── */
@@ -687,6 +714,150 @@ body {
 .footer-link { color: var(--text-muted); text-decoration: none; transition: color var(--dur); }
 .footer-link:hover { color: var(--text-secondary); text-decoration: underline; }
 
+/* ── Checklist ───────────────────────────────────────────────────────────── */
+.checklist-container {
+  max-width: 1000px; margin: 0 auto; padding: 32px 24px;
+  background: var(--bg); min-height: 600px;
+}
+
+.checklist-header {
+  margin-bottom: 32px; padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.checklist-title h2 {
+  font-size: 1.75rem; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 8px; letter-spacing: -0.02em;
+}
+
+.checklist-subtitle {
+  font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6;
+}
+
+.checklist-progress-wrap {
+  display: flex; align-items: center; gap: 16px; margin-top: 20px;
+}
+
+.checklist-progress-bar {
+  flex: 1; height: 8px; background: var(--surface-2);
+  border-radius: 99px; overflow: hidden;
+}
+
+.checklist-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+  border-radius: 99px; transition: width 0.4s var(--ease-snap);
+}
+
+.checklist-progress-text {
+  font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);
+  white-space: nowrap; min-width: 150px; text-align: right;
+}
+
+.checklist-body {
+  display: flex; flex-direction: column; gap: 28px;
+}
+
+.checklist-category {
+  background: var(--surface-1); border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+
+.checklist-category-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 16px 20px; background: var(--surface-2);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.checklist-category-icon {
+  font-size: 1.25rem; line-height: 1;
+}
+
+.checklist-category-label {
+  font-size: 1rem; font-weight: 600; color: var(--text-primary);
+  flex: 1;
+}
+
+.checklist-category-count {
+  font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
+  background: var(--surface-1); padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.checklist-items {
+  display: flex; flex-direction: column;
+}
+
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px 20px; border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--dur);
+}
+
+.checklist-item:last-child {
+  border-bottom: none;
+}
+
+.checklist-item:hover {
+  background: var(--surface-2);
+}
+
+.checklist-item.checked {
+  opacity: 0.6;
+}
+
+.checklist-item.checked .checklist-item-name {
+  text-decoration: line-through;
+}
+
+.checklist-checkbox {
+  width: 20px; height: 20px; margin: 0; flex-shrink: 0;
+  cursor: pointer; border-radius: 4px;
+  border: 2px solid var(--border-strong);
+  background: var(--bg); appearance: none;
+  transition: all var(--dur);
+  position: relative; margin-top: 2px;
+}
+
+.checklist-checkbox:hover {
+  border-color: var(--accent);
+}
+
+.checklist-checkbox:checked {
+  background: var(--accent); border-color: var(--accent);
+}
+
+.checklist-checkbox:checked::after {
+  content: '✓'; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  color: #fff; font-size: 14px; font-weight: 700;
+  line-height: 1;
+}
+
+.checklist-item-label {
+  flex: 1; cursor: pointer; display: flex; flex-direction: column; gap: 8px;
+}
+
+.checklist-item-header {
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+.checklist-item-name {
+  font-size: 0.95rem; font-weight: 600; color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.checklist-item-desc {
+  font-size: 0.85rem; color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.checklist-item-tip {
+  font-size: 0.82rem; color: var(--text-muted);
+  line-height: 1.6; padding: 10px 14px;
+  background: var(--surface-2); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-dim);
+}
+
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .comp-browser { display: none; }
@@ -697,8 +868,15 @@ body {
   .wf-team-grid { grid-template-columns: repeat(2,1fr); }
   .wf-article-grid { grid-template-columns: repeat(2,1fr); }
   .wf-projects-grid { grid-template-columns: 1fr; }
+  
+  .checklist-container { padding: 20px 16px; }
+  .checklist-title h2 { font-size: 1.5rem; }
+  .checklist-progress-wrap { flex-direction: column; align-items: stretch; }
+  .checklist-progress-text { text-align: left; }
+  .checklist-item { padding: 14px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+

@@ -1,7 +1,7 @@
 import { state } from './state.js';
-import { COMPONENTS, CATEGORIES, LAYOUT_COMPONENTS, LAYOUTS, HERO_BACKGROUNDS } from './data.js';
+import { COMPONENTS, CATEGORIES, LAYOUT_COMPONENTS, LAYOUTS, HERO_BACKGROUNDS, CHECKLIST_CATEGORIES, CHECKLIST_ITEMS } from './data.js';
 import { landingLayout, corporateLayout, startupLayout } from './layouts.js';
-import { portfolioLayout, blogLayout, componentsLayout, loginLayout } from './layouts2.js';
+import { portfolioLayout, blogLayout, componentsLayout, loginLayout, checklistLayout } from './layouts2.js';
 
 const LAYOUT_FNS = {
   landing:    landingLayout,
@@ -11,6 +11,7 @@ const LAYOUT_FNS = {
   blog:       blogLayout,
   components: componentsLayout,
   login:      loginLayout,
+  checklist:  checklistLayout,
 };
 
 // ── Layout tabs ───────────────────────────────────────────────────────────────
@@ -31,6 +32,11 @@ export function renderMockup() {
   if (state.outlinesOn) frame.classList.add('show-outlines');
   else frame.classList.remove('show-outlines');
   applyHeroBg();
+  
+  // If checklist layout, render checklist items
+  if (state.activeLayout === 'checklist') {
+    renderChecklist();
+  }
 }
 
 // ── Hero background ───────────────────────────────────────────────────────────
@@ -71,7 +77,14 @@ export function renderBrowser() {
     if (!show) continue;
     const cat = comp.category || 'content';
     if (!grouped[cat]) grouped[cat] = [];
-    grouped[cat].push({ id, ...comp, present: presentIds.has(id) });
+    
+    // Find which layouts have this component
+    const foundIn = [];
+    for (const [layoutId, compIds] of Object.entries(LAYOUT_COMPONENTS)) {
+      if (compIds.includes(id)) foundIn.push(layoutId);
+    }
+    
+    grouped[cat].push({ id, ...comp, present: presentIds.has(id), foundIn });
   }
 
   let html = '';
@@ -82,10 +95,18 @@ export function renderBrowser() {
       <div class="browser-category-label">${catLabel}</div>
     </div>`;
     for (const item of items) {
+      const layoutHint = !item.present && item.foundIn.length > 0
+        ? `\nClick to see in: ${item.foundIn.map(id => LAYOUTS.find(l => l.id === id)?.label).filter(Boolean).join(', ')}`
+        : '';
+      const title = (item.also ? 'Also: ' + item.also.join(', ') : '') + layoutHint;
+      
       html += `<div class="browser-item${item.present ? '' : ' missing'}${state.activeComp === item.id ? ' active' : ''}"
-                   data-comp-id="${item.id}" title="${item.also ? 'Also: ' + item.also.join(', ') : ''}">
+                   data-comp-id="${item.id}" 
+                   data-found-in="${item.foundIn.join(',')}"
+                   title="${title}">
         <div class="browser-dot"></div>
         ${item.name}
+        ${!item.present && item.foundIn.length > 0 ? '<span class="browser-switch-hint">→</span>' : ''}
       </div>`;
     }
   }
@@ -119,6 +140,16 @@ export function showTooltip(compId, triggerEl) {
     tipWrap.style.display = '';
   } else {
     tipWrap.style.display = 'none';
+  }
+
+  // Frameworks section
+  const fwWrap = document.getElementById('ttFrameworksWrap');
+  const fwEl = document.getElementById('ttFrameworks');
+  if (comp.frameworks?.length) {
+    fwEl.innerHTML = comp.frameworks.map(fw => `<span class="tt-framework-pill">${fw}</span>`).join('');
+    fwWrap.style.display = '';
+  } else {
+    fwWrap.style.display = 'none';
   }
 
   tt.classList.remove('hidden');
@@ -155,3 +186,67 @@ export function syncBrowserHighlight(compId) {
     el.classList.toggle('active', el.dataset.compId === compId);
   });
 }
+
+// ── Checklist ─────────────────────────────────────────────────────────────────
+export function renderChecklist() {
+  const body = document.getElementById('checklistBody');
+  if (!body) return;
+
+  // Load checked state from localStorage
+  const checked = new Set(JSON.parse(localStorage.getItem('checklistChecked') || '[]'));
+
+  let html = '';
+  for (const [catKey, catData] of Object.entries(CHECKLIST_CATEGORIES)) {
+    const items = CHECKLIST_ITEMS.filter(item => item.category === catKey);
+    if (items.length === 0) continue;
+
+    html += `<div class="checklist-category">
+      <div class="checklist-category-header">
+        <span class="checklist-category-icon">${catData.icon}</span>
+        <span class="checklist-category-label">${catData.label}</span>
+        <span class="checklist-category-count">${items.filter(i => checked.has(i.id)).length} / ${items.length}</span>
+      </div>
+      <div class="checklist-items">`;
+
+    for (const item of items) {
+      const isChecked = checked.has(item.id);
+      html += `<div class="checklist-item${isChecked ? ' checked' : ''}" data-item-id="${item.id}">
+        <input type="checkbox" class="checklist-checkbox" id="check-${item.id}" ${isChecked ? 'checked' : ''}>
+        <label for="check-${item.id}" class="checklist-item-label">
+          <div class="checklist-item-header">
+            <span class="checklist-item-name">${item.label}</span>
+            <span class="checklist-item-desc">${item.desc}</span>
+          </div>
+          <div class="checklist-item-tip">${item.tip}</div>
+        </label>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  body.innerHTML = html;
+  updateChecklistProgress();
+}
+
+export function updateChecklistProgress() {
+  const checked = new Set(JSON.parse(localStorage.getItem('checklistChecked') || '[]'));
+  const total = CHECKLIST_ITEMS.length;
+  const complete = checked.size;
+  const percent = total > 0 ? (complete / total) * 100 : 0;
+
+  const fill = document.getElementById('checklistProgress');
+  const text = document.getElementById('checklistProgressText');
+
+  if (fill) fill.style.width = `${percent}%`;
+  if (text) text.textContent = `${complete} / ${total} complete (${Math.round(percent)}%)`;
+
+  // Update category counts
+  for (const [catKey, catData] of Object.entries(CHECKLIST_CATEGORIES)) {
+    const items = CHECKLIST_ITEMS.filter(item => item.category === catKey);
+    const catComplete = items.filter(i => checked.has(i.id)).length;
+    const countEl = document.querySelector(`.checklist-category-header:has(+ .checklist-items [data-item-id^="${catKey}"]) .checklist-category-count`);
+    if (countEl) countEl.textContent = `${catComplete} / ${items.length}`;
+  }
+}
+

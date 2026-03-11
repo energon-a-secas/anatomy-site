@@ -2,8 +2,8 @@ export const state = {
   activeLayout: 'landing',
   activeComp: null,      // id of currently hovered component
   browserOpen: true,
-  outlinesOn: false,
+  outlinesOn: true,      // Show outlines by default
   searchQuery: '',
-  dummyMode: false,
+  dummyMode: true,       // Show dummy content by default
   heroBg: 'solid',
 };

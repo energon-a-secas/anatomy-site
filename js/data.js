@@ -14,6 +14,7 @@ export const COMPONENTS = {
     desc: 'Horizontal bar at the top of every page. Orients users, hosts the logo, navigation links, and the primary CTA.',
     variants: ['Standard', 'Centered logo', 'Transparent overlay', 'Mega menu', 'Sticky / fixed', 'With utility bar'],
     tip: '"Add a sticky navbar: logo on the left, 4 nav links centered, and a filled CTA button on the right."',
+    frameworks: ['Tailwind UI', 'Headless UI', 'Radix UI', 'Shadcn/ui', 'Material UI', 'Chakra UI'],
     category: 'navigation',
   },
   logo: {
@@ -102,6 +103,7 @@ export const COMPONENTS = {
     desc: 'Horizontal row of tabs that switch between views within the same page. The active tab is visually distinguished.',
     variants: ['Underline style', 'Pill / filled style', 'Boxed', 'With icons', 'Vertical tabs', 'Scrollable on mobile'],
     tip: '"Add tabs below the page header: underline style, active tab in brand color with a 2px bottom border."',
+    frameworks: ['Radix UI', 'Headless UI', 'React Aria', 'Shadcn/ui', 'Material UI', 'Chakra UI'],
     category: 'navigation',
   },
   'hero-section': {
@@ -158,6 +160,7 @@ export const COMPONENTS = {
     desc: 'The main action button. High contrast, visually prominent, with a clear and specific action label.',
     variants: ['Filled / solid', 'Large hero size', 'With arrow icon', 'With loading spinner', 'Gradient fill'],
     tip: '"Add a large primary CTA: filled, high-contrast color, 44–48px height, label like \'Get started free →\'."',
+    frameworks: ['Tailwind CSS', 'Shadcn/ui', 'Material UI', 'Chakra UI', 'Ant Design', 'Mantine'],
     category: 'content',
   },
   'ghost-button': {
@@ -214,6 +217,7 @@ export const COMPONENTS = {
     desc: 'An interactive element that expands and collapses to reveal content. Used for FAQ sections.',
     variants: ['Single open at a time', 'Multiple open', 'With +/− icon', 'With chevron', 'Borderless / minimal'],
     tip: '"Add an FAQ accordion: each item has a question row that expands to show the answer. Chevron rotates 180° on open."',
+    frameworks: ['Radix UI', 'Headless UI', 'React Aria', 'Shadcn/ui', 'Material UI', 'Chakra UI'],
     category: 'content',
   },
   'feature-card': {
@@ -278,6 +282,7 @@ export const COMPONENTS = {
     desc: 'A structured display of tabular data with rows, columns, headers, and optional sorting, filtering, and row actions.',
     variants: ['Basic', 'With sortable columns', 'With row actions', 'Striped rows', 'Compact / dense', 'With pagination footer'],
     tip: '"Add a data table: sticky header, alternating row colors, right-align numeric columns, icon-only action buttons per row."',
+    frameworks: ['TanStack Table', 'AG Grid', 'Material React Table', 'Ant Design Table', 'Mantine DataTable'],
     category: 'feedback',
   },
   avatar: {
@@ -326,6 +331,7 @@ export const COMPONENTS = {
     desc: 'A single-line text field for collecting short user input like a name, email, or search query.',
     variants: ['Default', 'With label above', 'With placeholder', 'With prefix/suffix icon', 'With validation error state'],
     tip: '"Add a labeled text input: label above, 40–44px height, 1px border, 6px radius. Red border + error message on invalid."',
+    frameworks: ['Tailwind CSS', 'Shadcn/ui', 'React Hook Form', 'Formik', 'Material UI', 'Chakra UI'],
     category: 'forms',
   },
   textarea: {
@@ -379,6 +385,7 @@ export const LAYOUT_COMPONENTS = {
   blog:      ['navbar','logo','logomark','wordmark','nav-link','search-bar','cta-button','hamburger','breadcrumb','article-featured','badge','headline','subheadline','thumbnail','avatar','section-header','article-card','pagination','footer','social-icons'],
   components: ['navbar','logo','sidebar-nav','breadcrumb','tab-bar','cta-button','ghost-button','badge','alert','section-header','input-field','select-field','textarea','toggle-switch','checkbox','card','data-table','divider','pagination','feature-card'],
   login:     ['logo','logomark','wordmark','headline','subheadline','cta-button','ghost-button','input-field','form','divider'],
+  checklist: [], // No hoverable components in checklist view
 };
 
 export const LAYOUTS = [
@@ -389,6 +396,7 @@ export const LAYOUTS = [
   { id: 'blog',       label: 'Blog' },
   { id: 'components', label: 'Component Library' },
   { id: 'login',      label: 'Login Page' },
+  { id: 'checklist',  label: 'Website Checklist' },
 ];
 
 export const HERO_BACKGROUNDS = [
@@ -400,4 +408,76 @@ export const HERO_BACKGROUNDS = [
   { id: 'pattern-dots',  label: 'Dots',       swatch: '#fff' },
   { id: 'pattern-lines', label: 'Lines',      swatch: '#f3f4f6' },
   { id: 'image',         label: 'Photo',      swatch: 'url(dummy-image.png)' },
+];
+
+// Website launch checklist items
+export const CHECKLIST_CATEGORIES = {
+  seo:          { label: 'SEO & Metadata', icon: '🔍' },
+  technical:    { label: 'Technical Setup', icon: '⚙️' },
+  analytics:    { label: 'Analytics & Tracking', icon: '📊' },
+  legal:        { label: 'Legal & Compliance', icon: '⚖️' },
+  performance:  { label: 'Performance', icon: '⚡' },
+  security:     { label: 'Security', icon: '🔒' },
+  accessibility: { label: 'Accessibility', icon: '♿' },
+  social:       { label: 'Social Media', icon: '📱' },
+};
+
+export const CHECKLIST_ITEMS = [
+  // SEO & Metadata
+  { id: 'title', category: 'seo', label: 'Page title (<title> tag)', desc: 'Unique, descriptive title under 60 characters', tip: 'Add <title>Your Brand — Short Value Prop</title> in <head>. Keep under 60 chars to avoid truncation in search results.' },
+  { id: 'meta-desc', category: 'seo', label: 'Meta description', desc: 'Compelling summary under 160 characters', tip: 'Add <meta name="description" content="..."> in <head>. Write 150-160 chars. This appears in search results under your title.' },
+  { id: 'og-title', category: 'seo', label: 'Open Graph title', desc: 'Title shown when shared on social media', tip: 'Add <meta property="og:title" content="Your Title">. Can be same as page title or slightly different for social context.' },
+  { id: 'og-desc', category: 'seo', label: 'Open Graph description', desc: 'Description for social media previews', tip: 'Add <meta property="og:description" content="...">. Can be same as meta description or tailored for social sharing.' },
+  { id: 'og-image', category: 'seo', label: 'Open Graph image (OG preview)', desc: '1200×630px image for social media cards', tip: 'Add <meta property="og:image" content="https://yoursite.com/og-preview.jpg">. Use 1200×630px PNG or JPG, under 1MB. This is what shows when you share on Facebook, LinkedIn, Slack.' },
+  { id: 'og-url', category: 'seo', label: 'Open Graph URL', desc: 'Canonical URL for social sharing', tip: 'Add <meta property="og:url" content="https://yoursite.com/">. Use the full, canonical URL of the page.' },
+  { id: 'twitter-card', category: 'seo', label: 'Twitter card meta tags', desc: 'Twitter-specific preview tags', tip: 'Add <meta name="twitter:card" content="summary_large_image">, twitter:title, twitter:description, twitter:image. Enables rich previews on Twitter/X.' },
+  { id: 'canonical', category: 'seo', label: 'Canonical URL', desc: 'Link rel="canonical" to avoid duplicate content', tip: 'Add <link rel="canonical" href="https://yoursite.com/"> to tell search engines this is the main version of the page.' },
+  { id: 'structured-data', category: 'seo', label: 'Structured data (JSON-LD)', desc: 'Schema.org markup for rich snippets', tip: 'Add <script type="application/ld+json"> with schema.org markup (e.g., WebSite, Organization, Article). Helps Google show rich results.' },
+  { id: 'meta-robots', category: 'seo', label: 'Meta robots tag', desc: 'Control indexing and following links', tip: 'Add <meta name="robots" content="index, follow"> to allow search engines to index your page. Use "noindex, nofollow" for private pages.' },
+
+  // Technical Setup
+  { id: 'favicon', category: 'technical', label: 'Favicon', desc: '32×32px icon shown in browser tabs', tip: 'Add <link rel="icon" type="image/x-icon" href="favicon.ico"> or use PNG. Also add apple-touch-icon (180×180px) for iOS home screen.' },
+  { id: 'robots-txt', category: 'technical', label: 'robots.txt', desc: 'Instructions for search engine crawlers', tip: 'Create /robots.txt file. Use "User-agent: *\nAllow: /" to allow all crawlers. Add "Sitemap: https://yoursite.com/sitemap.xml" at the bottom.' },
+  { id: 'sitemap', category: 'technical', label: 'sitemap.xml', desc: 'XML file listing all pages for search engines', tip: 'Create /sitemap.xml with all pages. Submit to Google Search Console. Update whenever you add/remove pages.' },
+  { id: 'ssl', category: 'technical', label: 'SSL certificate (HTTPS)', desc: 'Secure connection with TLS/SSL', tip: 'Enable HTTPS on your domain. Most hosting providers offer free SSL via Let\'s Encrypt. Redirect all HTTP to HTTPS.' },
+  { id: 'custom-domain', category: 'technical', label: 'Custom domain', desc: 'yoursite.com instead of subdomain.platform.com', tip: 'Register a domain and point it to your hosting. Add CNAME file if using GitHub Pages, or update DNS A/CNAME records for other hosts.' },
+  { id: '404-page', category: 'technical', label: 'Custom 404 page', desc: 'Friendly error page for broken links', tip: 'Create /404.html with helpful message, search box, and links to main pages. GitHub Pages auto-serves 404.html for missing pages.' },
+  { id: 'responsive', category: 'technical', label: 'Responsive design', desc: 'Works on mobile, tablet, and desktop', tip: 'Add <meta name="viewport" content="width=device-width, initial-scale=1.0">. Use CSS media queries and test on mobile (375px), tablet (768px), desktop (1440px).' },
+  { id: 'crossbrowser', category: 'technical', label: 'Cross-browser testing', desc: 'Test in Chrome, Firefox, Safari, Edge', tip: 'Check your site in Chrome, Firefox, Safari, Edge. Use BrowserStack or real devices. Verify ES6 module support for modern JS.' },
+
+  // Analytics & Tracking
+  { id: 'analytics', category: 'analytics', label: 'Analytics platform', desc: 'Google Analytics, Plausible, or similar', tip: 'Add Google Analytics 4 (GA4) script to <head>, or use privacy-friendly alternatives like Plausible, Fathom, or Simple Analytics. Track page views and conversions.' },
+  { id: 'search-console', category: 'analytics', label: 'Google Search Console', desc: 'Monitor search performance and indexing', tip: 'Sign up at search.google.com/search-console. Verify ownership via HTML tag or DNS. Submit sitemap. Monitor indexing issues and search queries.' },
+  { id: 'conversion-tracking', category: 'analytics', label: 'Conversion tracking', desc: 'Track goals, sign-ups, purchases', tip: 'Set up goals in GA4 or your analytics tool. Track button clicks, form submissions, and key user actions. Use event tracking.' },
+
+  // Legal & Compliance
+  { id: 'privacy-policy', category: 'legal', label: 'Privacy Policy', desc: 'How you collect, use, and protect user data', tip: 'Create /privacy.html explaining data collection, cookies, analytics. Link in footer. Required if you collect any user data or use analytics.' },
+  { id: 'terms', category: 'legal', label: 'Terms of Service', desc: 'Rules for using your website', tip: 'Create /terms.html with terms and conditions. Link in footer. Especially important for SaaS, marketplaces, or user-generated content sites.' },
+  { id: 'cookie-banner', category: 'legal', label: 'Cookie consent banner', desc: 'GDPR/CCPA compliant cookie notice', tip: 'If targeting EU/California users, add cookie banner before setting any cookies. Use tools like CookieYes, OneTrust, or custom solution. Must allow opt-out.' },
+  { id: 'gdpr', category: 'legal', label: 'GDPR compliance', desc: 'EU data protection requirements', tip: 'If you have EU visitors: get consent before analytics/cookies, provide data export/deletion, have clear privacy policy, use secure data handling.' },
+
+  // Performance
+  { id: 'image-optimization', category: 'performance', label: 'Image optimization', desc: 'Compress and format images efficiently', tip: 'Use WebP format for photos. Compress with ImageOptim or Squoosh. Keep images under 200KB. Use width/height attributes to prevent layout shift.' },
+  { id: 'lazy-loading', category: 'performance', label: 'Lazy loading', desc: 'Load images only when needed', tip: 'Add loading="lazy" to <img> tags below the fold. Browsers will defer loading until user scrolls near them. Saves bandwidth and speeds up initial load.' },
+  { id: 'minify', category: 'performance', label: 'Minify CSS/JS', desc: 'Remove whitespace and comments', tip: 'Use build tools (Vite, esbuild, Webpack) or online tools to minify CSS/JS. Reduces file size by 30-40%. For production only.' },
+  { id: 'lighthouse', category: 'performance', label: 'Lighthouse score', desc: 'Audit performance, accessibility, SEO', tip: 'Run Lighthouse in Chrome DevTools (Cmd+Option+I > Lighthouse tab). Aim for 90+ in all categories. Fix issues it reports.' },
+  { id: 'font-loading', category: 'performance', label: 'Font optimization', desc: 'Avoid FOUT/FOIT, use font-display', tip: 'Use font-display: swap in @font-face or Google Fonts URL (&display=swap). Preload critical fonts with <link rel="preload">. Subset fonts to needed characters only.' },
+
+  // Security
+  { id: 'https-redirect', category: 'security', label: 'HTTPS redirect', desc: 'Force all traffic to secure connection', tip: 'Configure server to redirect HTTP to HTTPS. For static sites, most hosts do this automatically. For custom servers, use 301 redirects.' },
+  { id: 'csp', category: 'security', label: 'Content Security Policy', desc: 'HTTP header preventing XSS attacks', tip: 'Add Content-Security-Policy header. Start with "default-src \'self\'; script-src \'self\' \'unsafe-inline\'". Adjust based on your external resources.' },
+  { id: 'cors', category: 'security', label: 'CORS configuration', desc: 'Control which domains can access your API', tip: 'If you have an API, set Access-Control-Allow-Origin header. Use specific domains, not "*" in production. For static sites, usually not needed.' },
+  { id: 'security-headers', category: 'security', label: 'Security headers', desc: 'X-Frame-Options, X-Content-Type-Options, etc.', tip: 'Add headers: X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy: no-referrer-when-downgrade. Use securityheaders.com to check.' },
+
+  // Accessibility
+  { id: 'alt-text', category: 'accessibility', label: 'Alt text for images', desc: 'Descriptive text for screen readers', tip: 'Add alt="description" to every <img>. Describe what\'s in the image. Use alt="" for decorative images. Never skip the alt attribute.' },
+  { id: 'aria-labels', category: 'accessibility', label: 'ARIA labels', desc: 'Accessibility labels for interactive elements', tip: 'Add aria-label to icon buttons, role="navigation" to navs, aria-hidden="true" to decorative icons. Use semantic HTML first, ARIA second.' },
+  { id: 'keyboard-nav', category: 'accessibility', label: 'Keyboard navigation', desc: 'Tab, Enter, Space work on all interactive elements', tip: 'Test your site with Tab (focus), Enter (click buttons/links), Space (checkboxes). Ensure visible focus indicators. Use tabindex="-1" to remove from tab order.' },
+  { id: 'color-contrast', category: 'accessibility', label: 'Color contrast', desc: 'WCAG AA minimum 4.5:1 for text', tip: 'Check contrast at webaim.org/resources/contrastchecker. Text should be 4.5:1 ratio (7:1 for AAA). Large text (18px+) can be 3:1.' },
+  { id: 'skip-link', category: 'accessibility', label: 'Skip to content link', desc: 'Hidden link for keyboard users to skip navigation', tip: 'Add <a href="#main" class="skip-link">Skip to content</a> at top of <body>. Hide off-screen, show on focus. Helps keyboard users skip repetitive nav.' },
+
+  // Social Media
+  { id: 'social-preview-test', category: 'social', label: 'Test social previews', desc: 'Verify OG image and meta tags render correctly', tip: 'Test at: facebook.com/sharing/debugger (Facebook/LinkedIn), cards-dev.twitter.com/validator (Twitter), opengraph.xyz (generic). Fix any warnings.' },
+  { id: 'social-icons', category: 'social', label: 'Social media links', desc: 'Links to your brand\'s social profiles', tip: 'Add icon links in footer or header to your social profiles. Use rel="noopener noreferrer" and target="_blank". Include aria-label for accessibility.' },
+  { id: 'share-buttons', category: 'social', label: 'Share buttons (optional)', desc: 'Let users share your content', tip: 'Add "Share on Twitter", "Share on LinkedIn" buttons to blog posts/articles. Use native share URLs or Web Share API for mobile.' },
 ];

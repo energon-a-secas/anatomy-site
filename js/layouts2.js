@@ -454,3 +454,26 @@ export function loginLayout(opts = {}) {
   </div>
 </div>`;
 }
+
+// ── Website Checklist ─────────────────────────────────────────────────────────
+export function checklistLayout() {
+  return `<div class="checklist-container">
+  <div class="checklist-header">
+    <div class="checklist-title">
+      <h2>Website Launch Checklist</h2>
+      <p class="checklist-subtitle">Essential items to prepare your website for launch. Check off items as you complete them.</p>
+    </div>
+    <div class="checklist-progress-wrap">
+      <div class="checklist-progress-bar">
+        <div class="checklist-progress-fill" id="checklistProgress"></div>
+      </div>
+      <div class="checklist-progress-text" id="checklistProgressText">0 / 0 complete</div>
+    </div>
+  </div>
+
+  <div class="checklist-body" id="checklistBody">
+    <!-- Rendered by renderChecklist() in render.js -->
+  </div>
+</div>`;
+}
+

@@ -1,6 +1,6 @@
 import { state } from './state.js';
 import { renderTabs, renderMockup, renderBrowser, renderHeroBgPicker, applyHeroBg,
-         showTooltip, hideTooltip, syncBrowserHighlight } from './render.js';
+         showTooltip, hideTooltip, syncBrowserHighlight, updateChecklistProgress } from './render.js';
 import { debounce } from './utils.js';
 
 let currentHovered = null;
@@ -43,11 +43,41 @@ export function initEvents() {
     syncBrowserHighlight(null);
   });
 
-  // Browser item click → scroll to component in mockup
+  // Browser item click → scroll to component in mockup OR switch to layout with component
   document.getElementById('browserList').addEventListener('click', e => {
     const item = e.target.closest('.browser-item');
-    if (!item || item.classList.contains('missing')) return;
+    if (!item) return;
     const id = item.dataset.compId;
+    
+    // If component is missing in current layout, switch to first layout that has it
+    if (item.classList.contains('missing')) {
+      const foundIn = item.dataset.foundIn?.split(',').filter(Boolean) || [];
+      if (foundIn.length > 0) {
+        state.activeLayout = foundIn[0]; // Switch to first layout that has this component
+        state.activeComp = null;
+        renderTabs();
+        renderMockup();
+        renderBrowser();
+        hideTooltip();
+        currentHovered = null;
+        
+        // After render, scroll to the component
+        setTimeout(() => {
+          const target = document.querySelector(`#mockupFrame [data-comp="${id}"]`);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            target.classList.add('hovered');
+            currentHovered = target;
+            state.activeComp = id;
+            showTooltip(id, target);
+            syncBrowserHighlight(id);
+          }
+        }, 100);
+      }
+      return;
+    }
+    
+    // Component is present, scroll to it
     const target = document.querySelector(`#mockupFrame [data-comp="${id}"]`);
     if (!target) return;
     target.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -96,5 +126,26 @@ export function initEvents() {
     state.heroBg = btn.dataset.bg;
     renderHeroBgPicker();
     applyHeroBg();
+  });
+
+  // Checklist checkbox toggle
+  document.getElementById('mockupFrame').addEventListener('change', e => {
+    if (!e.target.classList.contains('checklist-checkbox')) return;
+    const itemId = e.target.id.replace('check-', '');
+    const checked = new Set(JSON.parse(localStorage.getItem('checklistChecked') || '[]'));
+    
+    if (e.target.checked) {
+      checked.add(itemId);
+    } else {
+      checked.delete(itemId);
+    }
+    
+    localStorage.setItem('checklistChecked', JSON.stringify([...checked]));
+    
+    // Update visual state
+    const item = e.target.closest('.checklist-item');
+    if (item) item.classList.toggle('checked', e.target.checked);
+    
+    updateChecklistProgress();
   });
 }
