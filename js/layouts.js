@@ -254,46 +254,111 @@ export function landingLayout(opts = {}) {
 </div>`;
 }
 
-// ── Corporate ─────────────────────────────────────────────────────────────────
+// ── Corporate (IBM/Deloitte style) ───────────────────────────────────────────
 export function corporateLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
   return `<div class="wf-page">
-  ${sharedNavbar(H)}
+  <nav class="wf-comp wf-navbar" data-comp="navbar" style="position:relative">
+    <div class="wf-comp wf-logo-group" data-comp="logo">
+      <div class="wf-comp wf-logomark-box" data-comp="logomark"></div>
+      <div class="wf-comp" data-comp="wordmark">${H.lw(66, 12, 'Acme')}</div>
+    </div>
+    <div class="wf-nav-center">
+      <div class="wf-comp wf-nav-item" data-comp="nav-link">${H.navTxt('About', 36)}</div>
+      <div class="wf-comp wf-nav-item" data-comp="nav-link" style="position:relative">
+        ${H.navTxt('Solutions ▾', 60)}
+      </div>
+      <div class="wf-comp wf-nav-item" data-comp="nav-link">${H.navTxt('Industries', 52)}</div>
+      <div class="wf-comp wf-nav-item" data-comp="nav-link">${H.navTxt('Insights', 42)}</div>
+      <div class="wf-comp wf-nav-item" data-comp="nav-link">${H.navTxt('Careers', 40)}</div>
+    </div>
+    <div class="wf-nav-right">
+      <div class="wf-comp" data-comp="cta-button">${H.fbtn('Contact us', 100, 32)}</div>
+      <div class="wf-comp wf-ham" data-comp="hamburger">
+        <div class="wf-ham-line"></div><div class="wf-ham-line"></div><div class="wf-ham-line"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="wf-comp" data-comp="mega-menu" style="background:#f3f4f6;border-bottom:1px solid #e5e7eb;padding:20px 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px">
+    ${[['Consulting',['Digital Transformation','Strategy & Operations','Technology Advisory','Change Management']],
+       ['Technology',['Cloud Migration','Data & AI','Cybersecurity','Enterprise Applications']],
+       ['Managed Services',['Infrastructure','Application Support','DevOps & SRE','24/7 Monitoring']]].map(([heading, links]) => `
+    <div>
+      <div style="margin-bottom:8px">${H.lw(100, 12, heading)}</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${links.map(l => `<div class="wf-comp wf-nav-item" data-comp="nav-link">${H.navTxt(l, 120)}</div>`).join('')}
+      </div>
+    </div>`).join('')}
+  </div>
+
   <div class="wf-comp wf-breadcrumb" data-comp="breadcrumb">
     ${H.navTxt('Home', 36)}<div class="wf-breadcrumb-sep"></div>
     ${H.navTxt('Solutions', 56)}<div class="wf-breadcrumb-sep"></div>
     ${H.navTxt('Enterprise', 60)}
   </div>
-  <div class="wf-comp wf-hero" data-comp="hero-section">
-    <div class="wf-hero-content">
-      <div class="wf-comp" data-comp="headline" style="display:flex;flex-direction:column;gap:8px">
-        ${H.lw(240, 26, 'Trusted by industry')}${H.lw(200, 26, 'leaders worldwide')}
-      </div>
-      <div class="wf-comp" data-comp="subheadline" style="display:flex;flex-direction:column;gap:6px">
-        ${H.lw(280, 10, 'Enterprise-grade solutions tailored to your needs.')}
-        ${H.lw(250, 10, 'Security, compliance, and scale — without the complexity.')}
-      </div>
-      <div class="wf-hero-btns">
-        ${H.fbtn('Request a demo', 140, 40)}${H.obtn('View case studies', 150, 40)}
+
+  <div class="wf-section">
+    <div class="wf-comp wf-section-header" data-comp="section-header">
+      <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
+        ${H.lw(260, 22, 'Enterprise solutions that scale')}
+        ${H.lw(300, 10, 'Driving digital transformation for Fortune 500 companies.')}
       </div>
     </div>
-    <div class="wf-comp" data-comp="hero-image">${H.img(260, 180)}</div>
+    <div class="wf-comp" data-comp="tab-bar" style="display:flex;gap:0;border-bottom:2px solid #e5e7eb;margin-bottom:20px">
+      ${['Solutions','Industries','Partners'].map((t,i) => `
+      <div style="padding:10px 20px;cursor:pointer;font-size:13px;font-family:-apple-system,sans-serif;${i===0?'border-bottom:2px solid #1f2937;margin-bottom:-2px;font-weight:600;color:#1f2937':'color:#6b7280'}">${H.navTxt(t, 60)}</div>`).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      ${[['Cloud Infrastructure','Scalable, secure cloud solutions with 99.99% uptime SLA.'],
+         ['Data & Analytics','Real-time insights and reporting across your entire organization.'],
+         ['Security & Compliance','SOC 2, GDPR, and HIPAA compliant infrastructure by default.'],
+         ['AI & Automation','Intelligent process automation to reduce costs by 40%.']].map(([title,desc]) => `
+      <div class="wf-comp" data-comp="feature-card">
+        <div class="wf-feature-card-inner">
+          ${H.iconSq(32)}
+          <div class="wf-feature-lines" style="margin-top:8px">
+            ${H.lw(120, 12, title)}
+            <div style="margin-top:5px;display:flex;flex-direction:column;gap:4px">
+              ${H.lw(180, 7, desc)}${H.lw(160, 7, '')}
+            </div>
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>
   </div>
+
   <div class="wf-stats-bar">
     ${[['500+','Enterprise clients'],['98%','Retention rate'],['24/7','Global support'],['ISO 27001','Certified']].map(([n,l]) => `
     <div class="wf-comp wf-stat-inner" data-comp="stat-block">${H.lw(70, 28, n)}${H.lw(90, 8, l)}</div>`).join('')}
   </div>
-  <div class="wf-section">
-    <div class="wf-comp wf-section-header" data-comp="section-header">
-      <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
-        ${H.lw(180, 20, 'Our core services')}${H.lw(260, 10, 'End-to-end solutions for complex enterprise needs.')}
-      </div>
-    </div>
-    ${featureGrid(H, 3, [['Cloud Infrastructure','Scalable, secure cloud solutions with 99.99% uptime SLA.'],['Data Analytics','Real-time insights and reporting across your entire organization.'],['Security & Compliance','SOC 2, GDPR, and HIPAA compliant infrastructure by default.']])}
-  </div>
+
   <div class="wf-section" style="background:#f9fafb">
     <div class="wf-comp wf-section-header" data-comp="section-header">
-      <div style="display:flex;flex-direction:column;gap:7px;align-items:center">${H.lw(140, 20, 'Meet our team')}</div>
+      <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
+        ${H.lw(140, 20, 'Global offices')}
+        ${H.lw(240, 10, 'Local expertise, worldwide reach.')}
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+      ${[['New York','350 5th Avenue, NY 10118'],['London','1 Canada Square, E14 5AB'],['Singapore','1 Raffles Place, 048616'],['Sydney','200 George St, NSW 2000']].map(([city,addr]) => `
+      <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden">
+        <div class="wf-comp" data-comp="map-placeholder" style="width:100%;height:80px;background:#e5e7eb;display:flex;align-items:center;justify-content:center">
+          <div style="width:20px;height:20px;border:2px solid #9ca3af;border-radius:50%;position:relative">
+            <div style="width:4px;height:4px;background:#9ca3af;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+          </div>
+        </div>
+        <div style="padding:10px">
+          ${H.lw(80, 12, city)}
+          <div style="margin-top:4px">${H.lw(140, 7, addr)}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>
+
+  <div class="wf-section">
+    <div class="wf-comp wf-section-header" data-comp="section-header">
+      <div style="display:flex;flex-direction:column;gap:7px;align-items:center">${H.lw(160, 20, 'Leadership team')}</div>
     </div>
     <div class="wf-team-grid">
       ${[['James Cooper','CEO & Co-founder'],['Aria Patel','CTO'],['Tyler Brooks','VP Sales'],['Ming Liu','Head of Design']].map(([n,r]) => `
@@ -306,7 +371,8 @@ export function corporateLayout(opts = {}) {
       </div></div>`).join('')}
     </div>
   </div>
-  <div class="wf-section">
+
+  <div class="wf-section" style="background:#f9fafb">
     <div class="wf-comp wf-section-header" data-comp="section-header">
       <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
         ${H.lw(160, 20, 'Get in touch')}${H.lw(240, 10, 'Our team typically responds within 2 hours.')}
@@ -338,85 +404,153 @@ export function corporateLayout(opts = {}) {
 </div>`;
 }
 
-// ── Startup ───────────────────────────────────────────────────────────────────
+// ── Startup (Linear/Vercel style) ────────────────────────────────────────────
 export function startupLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
   return `<div class="wf-page">
   ${sharedNavbar(H, { signup: true })}
-  <div class="wf-comp" data-comp="hero-section" style="padding:44px 32px 0;background:#f9fafb;border-bottom:1px solid #e5e7eb;text-align:center">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;max-width:560px;margin:0 auto">
-      <div class="wf-comp" data-comp="badge">${H.bdg('🚀 Just launched v2.0')}</div>
-      <div class="wf-comp" data-comp="headline" style="display:flex;flex-direction:column;gap:8px;align-items:center">
-        ${H.lw(360, 32, 'The smartest way to manage')}${H.lw(300, 32, 'your entire workflow')}
+
+  <div class="wf-comp" data-comp="hero-section" style="padding:52px 32px 44px;background:#0a0a0a;text-align:center">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;max-width:560px;margin:0 auto">
+      <div class="wf-comp" data-comp="badge">${H.bdg('v2.0 — Now available')}</div>
+      <div class="wf-comp" data-comp="headline" style="display:flex;flex-direction:column;gap:6px;align-items:center">
+        ${opts.dummy
+          ? `<span style="font-size:34px;font-weight:700;line-height:1.15;font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#a78bfa,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Build at the speed</span>
+             <span style="font-size:34px;font-weight:700;line-height:1.15;font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#a78bfa,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">of thought</span>`
+          : `${H.lw(280, 32, '')}${H.lw(220, 32, '')}`}
       </div>
       <div class="wf-comp" data-comp="subheadline" style="display:flex;flex-direction:column;gap:6px;align-items:center">
-        ${H.lw(320, 10, 'Automate the boring stuff. Focus on what matters.')}
-        ${H.lw(280, 10, 'Works with the tools you already love.')}
+        ${opts.dummy
+          ? `<span style="font-size:14px;color:#9ca3af;font-family:-apple-system,sans-serif">The developer platform for shipping modern software.</span>
+             <span style="font-size:14px;color:#9ca3af;font-family:-apple-system,sans-serif">Linear workflows. Zero config. Instant deploys.</span>`
+          : `${H.lw(300, 10, '')}${H.lw(260, 10, '')}`}
       </div>
-      <div style="display:flex;gap:10px;margin-top:4px">
-        ${H.fbtn('Start free trial', 140, 42)}${H.obtn('Watch demo', 120, 42)}
+      <div style="display:flex;gap:10px;margin-top:6px">
+        <div class="wf-comp" data-comp="cta-button">${H.fbtn('Start building', 130, 42)}</div>
+        <div class="wf-comp" data-comp="ghost-button">${H.obtn('Documentation', 130, 42)}</div>
       </div>
-    </div>
-    <div class="wf-comp" data-comp="hero-image" style="margin:20px auto 0;max-width:600px">
-      ${opts.dummy ? `<img src="dummy-image.png" style="width:100%;height:160px;object-fit:cover;border-radius:8px 8px 0 0;display:block">`
-                   : `<div class="wf-product-screenshot" style="width:100%;height:160px"></div>`}
     </div>
   </div>
+
+  <div class="wf-comp" data-comp="command-palette" style="max-width:440px;margin:24px auto;background:#18181b;border:1px solid #27272a;border-radius:8px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      ${opts.dummy
+        ? `<span style="font-size:13px;color:#71717a;font-family:ui-monospace,monospace">$</span>
+           <span style="font-size:13px;color:#e4e4e7;font-family:ui-monospace,monospace">npm install @acme/cli</span>`
+        : `<div class="wl wl-8" style="width:12px"></div><div class="wl wl-8" style="width:160px"></div>`}
+    </div>
+    ${opts.dummy
+      ? `<button style="font-size:11px;color:#a1a1aa;background:#27272a;border:1px solid #3f3f46;border-radius:4px;padding:3px 10px;cursor:pointer;font-family:-apple-system,sans-serif">Copy</button>`
+      : `<div class="wf-outline-btn" style="width:44px;height:22px"></div>`}
+  </div>
+
   <div class="wf-comp wf-logo-bar" data-comp="logo-bar">
-    <div class="wf-logo-bar-label">${H.lw(120, 8, 'Trusted by teams at')}</div>
+    <div class="wf-logo-bar-label">${H.lw(140, 8, 'Trusted by engineering teams')}</div>
     <div class="wf-logo-bar-items">
       ${[56,70,60,76,52,64].map(w=>`<div class="wf-brand-logo" style="width:${w}px"></div>`).join('')}
     </div>
   </div>
+
+  <div class="wf-section">
+    <div class="wf-comp wf-section-header" data-comp="section-header">
+      <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
+        ${H.lw(180, 20, 'Built for developers')}
+        ${H.lw(280, 10, 'Everything you need in one place. Nothing you don\'t.')}
+      </div>
+    </div>
+    <div class="wf-comp" data-comp="bento-grid" style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;gap:14px">
+      <div class="wf-comp" data-comp="feature-card" style="grid-column:span 2;grid-row:span 1">
+        <div class="wf-feature-card-inner" style="min-height:120px">
+          ${H.iconSq(32)}
+          <div class="wf-feature-lines" style="margin-top:10px">
+            ${H.lw(160, 14, 'Instant deploys')}
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">
+              ${H.lw(280, 8, 'Push to main and your changes are live in seconds.')}
+              ${H.lw(260, 8, 'Zero-config CI/CD with automatic preview environments.')}
+              ${H.lw(200, 8, '')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-comp" data-comp="feature-card">
+        <div class="wf-feature-card-inner" style="min-height:120px">
+          ${H.iconSq(32)}
+          <div class="wf-feature-lines" style="margin-top:10px">
+            ${H.lw(100, 14, 'Edge network')}
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">
+              ${H.lw(130, 8, 'Global CDN with 50+ PoPs.')}
+              ${H.lw(110, 8, '')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-comp" data-comp="feature-card">
+        <div class="wf-feature-card-inner" style="min-height:100px">
+          ${H.iconSq(32)}
+          <div class="wf-feature-lines" style="margin-top:10px">
+            ${H.lw(100, 14, 'Observability')}
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">
+              ${H.lw(130, 8, 'Logs, traces, and metrics.')}
+              ${H.lw(100, 8, '')}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wf-comp" data-comp="feature-card" style="grid-column:span 2;grid-row:span 1">
+        <div class="wf-feature-card-inner" style="min-height:100px">
+          ${H.iconSq(32)}
+          <div class="wf-feature-lines" style="margin-top:10px">
+            ${H.lw(180, 14, 'Framework agnostic')}
+            <div style="margin-top:6px;display:flex;flex-direction:column;gap:4px">
+              ${H.lw(300, 8, 'Works with Next.js, Remix, Astro, SvelteKit, and any static site.')}
+              ${H.lw(260, 8, 'Auto-detected build settings. Zero configuration required.')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="wf-stats-bar">
-    ${[['2M+','Tasks completed'],['40%','Time saved'],['99.99%','Uptime']].map(([n,l]) => `
+    ${[['50+','Edge locations'],['<100ms','Global p99'],['99.99%','Uptime SLA']].map(([n,l]) => `
     <div class="wf-comp wf-stat-inner" data-comp="stat-block">${H.lw(70, 28, n)}${H.lw(90, 8, l)}</div>`).join('')}
   </div>
-  <div class="wf-section"><div class="wf-comp wf-section-header" data-comp="section-header">
-    <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
-      ${H.lw(200, 20, 'Why teams choose us')}${H.lw(260, 10, 'Purpose-built for speed without sacrificing quality.')}
-    </div>
-  </div></div>
-  ${[['Automate repetitive work','Connect your apps and automate workflows in minutes. No code needed. Saves your team 10+ hours per week.','obtn','Watch demo'],
-     ['Real-time collaboration','Everyone on the same page. Comment, assign, and ship together with live updates across devices.','fbtn','Try it free']].map(([title,desc,btn,label],i) => `
-  <div class="wf-comp wf-spotlight${i===1?' reversed':''}" data-comp="feature-card">
-    <div class="wf-spotlight-text">
-      <div style="display:flex;flex-direction:column;gap:8px">
-        ${H.lw(200, 20, title)}<div style="display:flex;flex-direction:column;gap:5px">
-        ${H.lw(280, 8, desc)}${H.lw(260, 8, '')}${H.lw(240, 8, '')}</div>
-      </div>
-      <div style="margin-top:10px">${btn==='fbtn'?H.fbtn(label,120,34):H.obtn(label,120,34)}</div>
-    </div>
-    <div class="wf-spotlight-image">${H.img(280, 160)}</div>
-  </div>`).join('')}
+
   <div class="wf-section" style="background:#f9fafb">
     <div class="wf-comp wf-section-header" data-comp="section-header">
       <div style="display:flex;flex-direction:column;gap:7px;align-items:center">
-        ${H.lw(140, 20, 'Simple pricing')}${H.lw(220, 10, 'No hidden fees. Cancel anytime.')}
+        ${H.lw(120, 20, 'Changelog')}
+        ${H.lw(220, 10, 'What we\'ve been shipping recently.')}
       </div>
     </div>
-    <div class="wf-toggle" style="margin-bottom:20px">
-      <div class="wf-toggle-opt on"><div class="wf-toggle-inner" style="width:52px">${H.navTxt('Monthly',0)}</div></div>
-      <div class="wf-toggle-opt"><div class="wf-toggle-inner" style="width:60px">${H.navTxt('Annual',0)}</div></div>
-    </div>
-    <div class="wf-pricing-grid">
-      ${[{n:'Starter',p:'$0',f:['5 users','10 projects','2GB storage'],b:'obtn'},
-         {n:'Growth',p:'$19/mo',f:['25 users','Unlimited projects','20GB storage','Integrations'],b:'fbtn',pop:true},
-         {n:'Enterprise',p:'Custom',f:['Unlimited users','Custom storage','SSO','Priority support'],b:'obtn'}].map(({n,p,f,b,pop}) => `
-      <div class="wf-comp" data-comp="pricing-card"><div class="wf-pricing-inner${pop?' featured':''}">
-        ${pop?'<div class="wf-popular-badge">Most popular</div>':''}
-        ${H.lw(60,12,n)}<div class="wf-price-val">${H.lw(80,26,p)}</div>
-        <div class="wf-feature-list">${f.map(fi=>`<div class="wf-feature-list-item"><div class="wf-check"></div>${H.lw(100,8,fi)}</div>`).join('')}</div>
-        ${b==='fbtn'?H.fbtn('Get started','100%',32):H.obtn('Get started','100%',32)}
-      </div></div>`).join('')}
+    <div style="max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:0">
+      ${[['v2.1.0','2025-12-10','Edge Functions now support WebSocket connections and streaming responses.'],
+         ['v2.0.3','2025-11-28','Fixed DNS propagation delays for custom domains in EU regions.'],
+         ['v2.0.0','2025-11-15','Major release: new dashboard UI, instant rollbacks, and team permissions.'],
+         ['v1.9.8','2025-10-30','Performance improvements: 2x faster cold starts on serverless functions.']].map(([ver,date,desc], i) => `
+      <div class="wf-comp" data-comp="changelog-entry" style="display:flex;gap:16px;padding:14px 0;${i < 3 ? 'border-bottom:1px solid #e5e7eb;':''}">
+        <div style="min-width:70px;display:flex;flex-direction:column;gap:4px">
+          ${opts.dummy
+            ? `<span style="font-size:13px;font-weight:600;color:#7c3aed;font-family:ui-monospace,monospace">${ver}</span>
+               <span style="font-size:11px;color:#9ca3af;font-family:-apple-system,sans-serif">${date}</span>`
+            : `<div class="wl wl-10" style="width:50px"></div><div class="wl wl-8" style="width:60px"></div>`}
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px">
+          ${H.lw(300, 8, desc)}${H.lw(260, 8, '')}
+        </div>
+      </div>`).join('')}
     </div>
   </div>
+
   <div class="wf-cta-section">
     <div class="wf-cta-lines" style="margin-bottom:14px">
       ${H.lw(260, 22, 'Start shipping faster today.')}
-      ${H.lw(220, 10, 'Free forever. No credit card required.')}
+      ${H.lw(220, 10, 'Free forever for hobby projects. No credit card.')}
     </div>
-    ${H.fbtn('Create free account', 160, 42)}
+    <div style="display:flex;gap:10px">
+      <div class="wf-comp" data-comp="cta-button">${H.fbtn('Deploy now', 130, 42)}</div>
+      <div class="wf-comp" data-comp="ghost-button">${H.obtn('Read the docs', 130, 42)}</div>
+    </div>
   </div>
   ${sharedFooter(H)}
 </div>`;

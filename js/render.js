@@ -1,7 +1,10 @@
 import { state } from './state.js';
-import { COMPONENTS, CATEGORIES, LAYOUT_COMPONENTS, LAYOUTS, HERO_BACKGROUNDS, CHECKLIST_CATEGORIES, CHECKLIST_ITEMS } from './data.js';
+import { COMPONENTS, CATEGORIES, LAYOUT_COMPONENTS, LAYOUTS, HERO_BACKGROUNDS } from './data.js';
 import { landingLayout, corporateLayout, startupLayout } from './layouts.js';
-import { portfolioLayout, blogLayout, componentsLayout, loginLayout, checklistLayout } from './layouts2.js';
+import { portfolioLayout, blogLayout, componentsLayout, loginLayout, ecommerceLayout, linkinbioLayout } from './layouts2.js';
+import { agencyLayout, photographyLayout, magazineLayout, docsLayout, healthcareLayout } from './layouts3.js';
+import { fortuneLayout, saasLayout, fintechLayout, gamingLayout } from './layouts4.js';
+import { guildLayout } from './layouts5.js';
 
 const LAYOUT_FNS = {
   landing:    landingLayout,
@@ -11,17 +14,74 @@ const LAYOUT_FNS = {
   blog:       blogLayout,
   components: componentsLayout,
   login:      loginLayout,
-  checklist:  checklistLayout,
+  linkinbio:  linkinbioLayout,
+  fortune:    fortuneLayout,
+  ecommerce:  ecommerceLayout,
+  gaming:     gamingLayout,
+  saas:       saasLayout,
+  fintech:    fintechLayout,
+  agency:     agencyLayout,
+  photography: photographyLayout,
+  magazine:   magazineLayout,
+  docs:       docsLayout,
+  healthcare: healthcareLayout,
+  guild:      guildLayout,
 };
 
-// ── Layout tabs ───────────────────────────────────────────────────────────────
-export function renderTabs() {
-  const el = document.getElementById('layoutTabs');
-  el.innerHTML = LAYOUTS.map(l => `
-    <button class="layout-tab${state.activeLayout === l.id ? ' active' : ''}"
-            role="tab" aria-selected="${state.activeLayout === l.id}"
-            data-layout="${l.id}">${l.label}</button>
-  `).join('');
+// ── Layout navigation (dropdown categories) ───────────────────────────────────
+export function renderLayoutNav() {
+  const el = document.getElementById('layoutNav');
+  const categories = {
+    basic: 'Basic Types',
+    industry: 'Industry Layouts'
+  };
+
+  // Determine the active basic type for filtering industry layouts
+  const activeLayout = LAYOUTS.find(l => l.id === state.activeLayout);
+  const activeBasicType = state.lastBasicType || 'landing';
+
+  el.innerHTML = Object.entries(categories).map(([catId, catLabel]) => {
+    let layoutsInCat = LAYOUTS.filter(l => l.category === catId);
+
+    // Filter industry layouts based on the active basic type
+    if (catId === 'industry') {
+      const filtered = layoutsInCat.filter(l => l.parentType === activeBasicType);
+      if (filtered.length > 0) {
+        layoutsInCat = filtered;
+      }
+      // If no matches (e.g., login, components), show all as fallback
+    }
+
+    const buttonLabel = activeLayout?.category === catId ? activeLayout.label : catLabel;
+    const isActive = activeLayout?.category === catId;
+
+    // Show the parent basic type label for industry items
+    const basicTypeLabel = catId === 'industry'
+      ? LAYOUTS.find(l => l.id === activeBasicType)?.label || ''
+      : '';
+
+    return `
+      <div class="layout-dropdown">
+        <button class="layout-dropdown-btn ${isActive ? 'active' : ''}" data-category="${catId}" aria-expanded="false">
+          ${buttonLabel}
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12">
+            <path fill="currentColor" d="M2 4l4 4 4-4"/>
+          </svg>
+        </button>
+        <div class="layout-dropdown-menu" data-category="${catId}" role="menu">
+          ${catId === 'industry' && basicTypeLabel ? `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);padding:6px 12px 4px">Based on ${basicTypeLabel}</div>` : ''}
+          ${layoutsInCat.map(l => {
+            return `
+            <button class="layout-dropdown-item ${state.activeLayout === l.id ? 'active' : ''}"
+                    data-layout="${l.id}" role="menuitemradio" aria-checked="${state.activeLayout === l.id}">
+              ${l.label}
+            </button>
+          `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 // ── Wireframe mockup ──────────────────────────────────────────────────────────
@@ -32,11 +92,6 @@ export function renderMockup() {
   if (state.outlinesOn) frame.classList.add('show-outlines');
   else frame.classList.remove('show-outlines');
   applyHeroBg();
-  
-  // If checklist layout, render checklist items
-  if (state.activeLayout === 'checklist') {
-    renderChecklist();
-  }
 }
 
 // ── Hero background ───────────────────────────────────────────────────────────
@@ -77,37 +132,62 @@ export function renderBrowser() {
     if (!show) continue;
     const cat = comp.category || 'content';
     if (!grouped[cat]) grouped[cat] = [];
-    
+
     // Find which layouts have this component
     const foundIn = [];
     for (const [layoutId, compIds] of Object.entries(LAYOUT_COMPONENTS)) {
       if (compIds.includes(id)) foundIn.push(layoutId);
     }
-    
+
     grouped[cat].push({ id, ...comp, present: presentIds.has(id), foundIn });
+  }
+
+  // Use grid layout when searching, list layout when not searching
+  const isSearching = q.length > 0;
+  if (isSearching) {
+    list.classList.add('browser-grid');
+  } else {
+    list.classList.remove('browser-grid');
   }
 
   let html = '';
   for (const [catKey, catLabel] of Object.entries(CATEGORIES)) {
     const items = grouped[catKey];
     if (!items || items.length === 0) continue;
+
+    // Show category header in both modes
     html += `<div class="browser-category">
       <div class="browser-category-label">${catLabel}</div>
     </div>`;
+
+    // Add grid wrapper when searching
+    if (isSearching) {
+      html += `<div class="browser-grid-container">`;
+    }
+
     for (const item of items) {
       const layoutHint = !item.present && item.foundIn.length > 0
         ? `\nClick to see in: ${item.foundIn.map(id => LAYOUTS.find(l => l.id === id)?.label).filter(Boolean).join(', ')}`
         : '';
       const title = (item.also ? 'Also: ' + item.also.join(', ') : '') + layoutHint;
-      
-      html += `<div class="browser-item${item.present ? '' : ' missing'}${state.activeComp === item.id ? ' active' : ''}"
-                   data-comp-id="${item.id}" 
+
+      // Add badge when searching
+      const badgeHtml = isSearching ? `<span class="browser-item-badge">${catLabel}</span>` : '';
+
+      html += `<div class="browser-item${item.present ? '' : ' missing'}${state.activeComp === item.id ? ' active' : ''}${isSearching ? ' grid-item' : ''}"
+                   data-comp-id="${item.id}"
                    data-found-in="${item.foundIn.join(',')}"
                    title="${title}">
         <div class="browser-dot"></div>
         ${item.name}
         ${!item.present && item.foundIn.length > 0 ? '<span class="browser-switch-hint">→</span>' : ''}
+        ${badgeHtml}
       </div>`;
+    }
+
+    // Close grid wrapper when searching
+    if (isSearching) {
+      html += `</div>`;
     }
   }
   list.innerHTML = html || '<div style="padding:16px 12px;font-size:0.8rem;color:var(--text-muted)">No components match.</div>';
@@ -187,66 +267,4 @@ export function syncBrowserHighlight(compId) {
   });
 }
 
-// ── Checklist ─────────────────────────────────────────────────────────────────
-export function renderChecklist() {
-  const body = document.getElementById('checklistBody');
-  if (!body) return;
-
-  // Load checked state from localStorage
-  const checked = new Set(JSON.parse(localStorage.getItem('checklistChecked') || '[]'));
-
-  let html = '';
-  for (const [catKey, catData] of Object.entries(CHECKLIST_CATEGORIES)) {
-    const items = CHECKLIST_ITEMS.filter(item => item.category === catKey);
-    if (items.length === 0) continue;
-
-    html += `<div class="checklist-category">
-      <div class="checklist-category-header">
-        <span class="checklist-category-icon">${catData.icon}</span>
-        <span class="checklist-category-label">${catData.label}</span>
-        <span class="checklist-category-count">${items.filter(i => checked.has(i.id)).length} / ${items.length}</span>
-      </div>
-      <div class="checklist-items">`;
-
-    for (const item of items) {
-      const isChecked = checked.has(item.id);
-      html += `<div class="checklist-item${isChecked ? ' checked' : ''}" data-item-id="${item.id}">
-        <input type="checkbox" class="checklist-checkbox" id="check-${item.id}" ${isChecked ? 'checked' : ''}>
-        <label for="check-${item.id}" class="checklist-item-label">
-          <div class="checklist-item-header">
-            <span class="checklist-item-name">${item.label}</span>
-            <span class="checklist-item-desc">${item.desc}</span>
-          </div>
-          <div class="checklist-item-tip">${item.tip}</div>
-        </label>
-      </div>`;
-    }
-
-    html += `</div></div>`;
-  }
-
-  body.innerHTML = html;
-  updateChecklistProgress();
-}
-
-export function updateChecklistProgress() {
-  const checked = new Set(JSON.parse(localStorage.getItem('checklistChecked') || '[]'));
-  const total = CHECKLIST_ITEMS.length;
-  const complete = checked.size;
-  const percent = total > 0 ? (complete / total) * 100 : 0;
-
-  const fill = document.getElementById('checklistProgress');
-  const text = document.getElementById('checklistProgressText');
-
-  if (fill) fill.style.width = `${percent}%`;
-  if (text) text.textContent = `${complete} / ${total} complete (${Math.round(percent)}%)`;
-
-  // Update category counts
-  for (const [catKey, catData] of Object.entries(CHECKLIST_CATEGORIES)) {
-    const items = CHECKLIST_ITEMS.filter(item => item.category === catKey);
-    const catComplete = items.filter(i => checked.has(i.id)).length;
-    const countEl = document.querySelector(`.checklist-category-header:has(+ .checklist-items [data-item-id^="${catKey}"]) .checklist-category-count`);
-    if (countEl) countEl.textContent = `${catComplete} / ${items.length}`;
-  }
-}
 

@@ -1,5 +1,5 @@
-// Portfolio, Blog, Component Library, Login layouts.
-import { makeHelpers, sharedNavbar, sharedFooter } from './layouts.js';
+// Portfolio, Blog, Component Library, Login, and Ecommerce layouts.
+import { makeHelpers, sharedNavbar, sharedFooter, featureGrid } from './layouts.js';
 
 // ── Portfolio ─────────────────────────────────────────────────────────────────
 export function portfolioLayout(opts = {}) {
@@ -130,6 +130,7 @@ export function portfolioLayout(opts = {}) {
 </div>`;
 }
 
+
 // ── Blog ──────────────────────────────────────────────────────────────────────
 export function blogLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
@@ -212,6 +213,7 @@ export function blogLayout(opts = {}) {
   ${sharedFooter(H)}
 </div>`;
 }
+
 
 // ── Component Library ─────────────────────────────────────────────────────────
 export function componentsLayout(opts = {}) {
@@ -455,25 +457,272 @@ export function loginLayout(opts = {}) {
 </div>`;
 }
 
-// ── Website Checklist ─────────────────────────────────────────────────────────
-export function checklistLayout() {
-  return `<div class="checklist-container">
-  <div class="checklist-header">
-    <div class="checklist-title">
-      <h2>Website Launch Checklist</h2>
-      <p class="checklist-subtitle">Essential items to prepare your website for launch. Check off items as you complete them.</p>
-    </div>
-    <div class="checklist-progress-wrap">
-      <div class="checklist-progress-bar">
-        <div class="checklist-progress-fill" id="checklistProgress"></div>
+
+// ── Modern Ecommerce ───────────────────────────────────────────────────────────
+export function ecommerceLayout(opts = {}) {
+  const H = makeHelpers(opts.dummy);
+  const products = [
+    ['Premium Wireless Headphones', '$299.99', '4.8', 245],
+    ['Smart Watch Pro', '$449.99', '4.9', 512],
+    ['4K Webcam', '$179.99', '4.7', 189],
+  ];
+  const categories = [
+    ['Electronics', '256 products'],
+    ['Home & Garden', '128 products'],
+    ['Sports & Outdoors', '84 products'],
+    ['Fashion', '196 products'],
+  ];
+
+  return `<div class="wf-page">
+  ${sharedNavbar(H, { search: true })}
+
+  <div class="wf-comp wf-breadcrumb" data-comp="breadcrumb">
+    ${H.navTxt('Home', 36)}<div class="wf-breadcrumb-sep"></div>
+    ${H.navTxt('Shop', 34)}<div class="wf-breadcrumb-sep"></div>
+    ${H.navTxt('All Products', 76)}
+  </div>
+
+  <div class="wf-comp wf-hero" data-comp="hero-section" style="padding:24px 32px;background:linear-gradient(135deg,#fef3c7,#f59e0b)">
+    <div class="wf-hero-content" style="max-width:none">
+      <div class="wf-comp" data-comp="badge">${H.bdg('🔥 Limited Time')}</div>
+      <div class="wf-comp" data-comp="headline" style="display:flex;flex-direction:column;gap:8px">
+        ${H.lw(320, 32, 'Summer Tech Sale')}
       </div>
-      <div class="checklist-progress-text" id="checklistProgressText">0 / 0 complete</div>
+      <div class="wf-comp" data-comp="subheadline" style="display:flex;flex-direction:column;gap:6px">
+        ${H.lw(280, 12, 'Up to 40% off on premium electronics.')}
+        ${H.lw(240, 12, 'Free shipping on orders over $99.')}
+      </div>
+      <div class="wf-hero-btns">
+        <div class="wf-comp" data-comp="cta-button">${H.fbtn('Shop Now', 100, 40)}</div>
+        <div class="wf-comp" data-comp="ghost-button">${H.obtn('View Deals', 90, 40)}</div>
+      </div>
     </div>
   </div>
 
-  <div class="checklist-body" id="checklistBody">
-    <!-- Rendered by renderChecklist() in render.js -->
+  <div style="display:flex;gap:24px;padding:32px">
+    <div class="wf-comp wf-sidebar-nav" data-comp="sidebar-nav" style="width:220px">
+      <div style="margin-bottom:16px">
+        ${H.lw(60, 12, 'Categories')}
+      </div>
+      ${categories.map(([cat, count], i) => `
+      <div class="wf-sidebar-nav-item${i === 0 ? ' active' : ''}" style="display:flex;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="wf-sidebar-dot${i === 0 ? ' active' : ''}"></div>
+          ${H.lw(cat.length * 6, 9, cat)}
+        </div>
+        ${opts.dummy ? `<span style="font-size:11px;color:#6b7280;font-family:-apple-system,sans-serif">${count}</span>` : `<div class="wl wl-8" style="width:40px"></div>`}
+      </div>`).join('')}
+
+      <div style="margin:24px 0 16px">
+        ${H.lw(40, 12, 'Filters')}
+      </div>
+      <div style="padding:12px;background:#f9fafb;border-radius:8px">
+        ${H.lw(30, 9, 'Price Range')}
+        <div style="margin:8px 0">
+          <div style="height:4px;background:#d1d5db;border-radius:2px">
+            <div style="width:60%;height:4px;background:#1f2937;border-radius:2px"></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between">
+          ${H.lw(20, 8, '$0')} ${H.lw(40, 8, '$1000+')}
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:1">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        ${H.lw(100, 12, '256 Products')}
+        <div class="wf-comp" data-comp="select-field" style="width:160px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid #d1d5db;border-radius:6px">
+            ${opts.dummy
+              ? `<span style="font-size:12px;color:#374151;font-family:-apple-system,sans-serif">Sort by: Featured</span><span style="font-size:10px">▾</span>`
+              : `<div class="wl wl-8" style="width:70px"></div>`
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-projects-grid" style="grid-template-columns:repeat(3,1fr);gap:24px">
+        ${products.map(([name, price, rating, reviews]) => `
+        <div class="wf-comp" data-comp="project-card">
+          <div class="wf-project-inner">
+            <div class="wf-comp" data-comp="thumbnail">
+              ${H.img('100%', 200)}
+              ${opts.dummy ? `<div style="position:absolute;top:8px;right:8px;padding:4px 8px;background:#10b981;color:#fff;font-size:11px;font-weight:600;border-radius:4px;font-family:-apple-system,sans-serif">-25%</div>` : ''}
+            </div>
+            <div class="wf-project-content" style="padding:16px">
+              <div style="margin-bottom:8px">
+                ${H.lw(name.length * 6, 12, name)}
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px">
+                <div style="display:flex;gap:2px">
+                  ${Array(5).fill(0).map((_, i) => `<div style="width:12px;height:12px;background:${i < Math.floor(parseFloat(rating)) ? '#fbbf24' : '#d1d5db'};border-radius:50%"></div>`).join('')}
+                </div>
+                ${opts.dummy
+                  ? `<span style="font-size:11px;color:#6b7280;font-family:-apple-system,sans-serif">${rating} (${reviews})</span>`
+                  : `<div class="wl wl-8" style="width:40px"></div>`
+                }
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+                ${H.lw(price.length * 8, 16, price)}
+                ${opts.dummy
+                  ? `<span style="font-size:11px;color:#9ca3af;text-decoration:line-through;font-family:-apple-system,sans-serif">$399.99</span>`
+                  : `<div class="wl wl-8" style="width:40px"></div>`
+                }
+              </div>
+              <div class="wf-comp" data-comp="cta-button">
+                ${H.fbtn('Add to Cart', '100%', 36)}
+              </div>
+            </div>
+          </div>
+        </div>`).join('')}
+      </div>
+
+      <div class="wf-comp" data-comp="pagination" style="margin-top:32px">
+        <div class="wf-pagination">
+          <div class="wf-page-btn">${H.lw(14, 6, '‹')}</div>
+          ${[1, 2, 3, '…', 12].map(n => `
+          <div class="wf-page-btn${n === 1 ? ' active' : ''}">
+            ${n === '…'
+              ? `<div class="wf-page-dots">${opts.dummy ? '…' : ''}</div>`
+              : `<div class="wl wl-8" style="width:${n === 1 ? 14 : 10}px;background:${n === 1 ? '#fff' : '#374151'}"></div>`
+            }
+          </div>`).join('')}
+          <div class="wf-page-btn">${H.lw(14, 6, '‹')}</div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  ${sharedFooter(H)}
 </div>`;
 }
 
+
+// ── Link in Bio (Carrd / Linktree style) ─────────────────────────────────────
+export function linkinbioLayout(opts = {}) {
+  const H = makeHelpers(opts.dummy);
+  const d = opts.dummy;
+
+  const socials = [
+    ['LinkedIn', '🔗'],
+    ['GitHub', '💻'],
+    ['Medium', '📝'],
+    ['YouTube', '▶️'],
+  ];
+
+  const professionalLinks = [
+    ['Portfolio Website', '🌐', 'My work and case studies'],
+    ['Resume / CV', '📄', 'Download my latest resume'],
+    ['Book a Call', '📅', 'Schedule a 30-min chat'],
+  ];
+
+  const projectLinks = [
+    ['Skill Roadmap Builder', '🗺️', 'Interactive career path tool'],
+    ['JSON Studio', '🔧', 'Visual JSON block editor'],
+    ['Decision Wheel', '🎯', 'Fun random decision maker'],
+    ['Presentation Sage', '📊', 'YAML-driven slide editor'],
+  ];
+
+  const communityLinks = [
+    ['Discord Server', '💬', 'Join 2K+ members'],
+    ['Newsletter', '📨', 'Weekly tech insights'],
+  ];
+
+  const linkBtn = (label, icon, desc) => `
+    <div class="wf-comp wf-link-btn" data-comp="link-button">
+      <div class="wf-link-btn-inner">
+        <div class="wf-link-favicon">${d
+          ? `<span style="font-size:16px">${icon}</span>`
+          : `<div style="width:18px;height:18px;background:#4b5563;border-radius:4px"></div>`
+        }</div>
+        <div class="wf-link-btn-text">
+          ${H.lw(label.length * 7, 13, label)}
+          ${desc ? `<div style="margin-top:2px">${H.lw(desc.length * 5.5, 8, desc)}</div>` : ''}
+        </div>
+        <div class="wf-link-arrow">${d ? '→' : ''}</div>
+      </div>
+    </div>`;
+
+  const sectionLabel = (text) => `
+    <div class="wf-comp wf-section-label" data-comp="section-divider">
+      ${d
+        ? `<span style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;font-family:-apple-system,sans-serif">${text}</span>`
+        : `<div class="wl wl-8" style="width:${text.length * 6}px"></div>`
+      }
+    </div>`;
+
+  return `<div class="wf-page wf-linkinbio-page">
+
+  <!-- Background image layer -->
+  <div class="wf-comp wf-bg-image" data-comp="background-image">
+    ${d
+      ? `<div style="position:absolute;inset:0;background:url('dummy-image.png') center/cover;filter:blur(12px) brightness(0.4);transform:scale(1.1)"></div>`
+      : `<div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);opacity:0.9"></div>`
+    }
+  </div>
+
+  <!-- Centered card container -->
+  <div class="wf-linkinbio-card">
+
+    <!-- Profile section -->
+    <div class="wf-linkinbio-profile">
+      <div class="wf-comp wf-linkinbio-avatar" data-comp="avatar">
+        ${d
+          ? `<div style="width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,#e0e7ff,#c7d2fe);border:3px solid rgba(255,255,255,0.2)"></div>`
+          : `<div style="width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08)"></div>`
+        }
+      </div>
+      <div class="wf-comp" data-comp="headline">
+        ${d
+          ? `<span style="font-size:22px;font-weight:700;color:#fff;display:block;text-align:center;font-family:-apple-system,sans-serif">Lucio</span>`
+          : `<div class="wl wl-22" style="width:180px;margin:0 auto;background:rgba(255,255,255,0.25)"></div>`
+        }
+      </div>
+      <div class="wf-comp" data-comp="subheadline">
+        ${d
+          ? `<span style="font-size:14px;font-weight:400;color:rgba(255,255,255,0.7);display:block;text-align:center;font-family:'Anonymous Pro',monospace">Cloud Architect · Builder · Writer</span>`
+          : `<div class="wl wl-10" style="width:200px;margin:0 auto;background:rgba(255,255,255,0.15)"></div>`
+        }
+      </div>
+      <div class="wf-comp" data-comp="badge" style="text-align:center;margin-top:4px">
+        ${d
+          ? `<span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(71,228,94,0.15);color:#47E45E;font-family:-apple-system,sans-serif">✦ Available for consulting</span>`
+          : `<div class="wf-badge-pill" style="margin:0 auto"><div class="wf-badge-dot"></div><div class="wl wl-8" style="width:80px"></div></div>`
+        }
+      </div>
+    </div>
+
+    <!-- Social icons row -->
+    <div class="wf-comp wf-linkinbio-socials" data-comp="social-icons">
+      ${socials.map(([name, icon]) => d
+        ? `<a class="wf-social-circle" title="${name}" style="width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.25);display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:border-color 0.2s"><span style="font-size:16px">${icon}</span></a>`
+        : `<div style="width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.15)"></div>`
+      ).join('')}
+    </div>
+
+    <!-- Professional links -->
+    ${sectionLabel('Professional')}
+    ${professionalLinks.map(([label, icon, desc]) => linkBtn(label, icon, desc)).join('')}
+
+    <!-- Projects -->
+    ${sectionLabel('Projects & Tools')}
+    ${projectLinks.map(([label, icon, desc]) => linkBtn(label, icon, desc)).join('')}
+
+    <!-- Community -->
+    ${sectionLabel('Community')}
+    ${communityLinks.map(([label, icon, desc]) => linkBtn(label, icon, desc)).join('')}
+
+    <!-- Footer / branding -->
+    <div class="wf-linkinbio-footer">
+      <div class="wf-comp" data-comp="logo">
+        ${d
+          ? `<span style="font-size:11px;color:rgba(255,255,255,0.35);font-family:-apple-system,sans-serif">Made with Carrd</span>`
+          : `<div class="wl wl-8" style="width:80px;margin:0 auto;background:rgba(255,255,255,0.1)"></div>`
+        }
+      </div>
+    </div>
+
+  </div>
+</div>`;
+}

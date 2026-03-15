@@ -1,9 +1,20 @@
-import { renderTabs, renderMockup, renderBrowser, renderHeroBgPicker } from './render.js';
+import { renderLayoutNav, renderMockup, renderBrowser, renderHeroBgPicker } from './render.js';
 import { initEvents } from './events.js';
 import { state } from './state.js';
+import { LAYOUTS } from './data.js';
 
 function init() {
-  renderTabs();
+  // Phase 5: URL sharing — read ?layout= param
+  const params = new URLSearchParams(window.location.search);
+  const urlLayout = params.get('layout');
+  if (urlLayout && LAYOUTS.some(l => l.id === urlLayout)) {
+    state.activeLayout = urlLayout;
+    const layout = LAYOUTS.find(l => l.id === urlLayout);
+    if (layout?.category === 'basic') state.lastBasicType = urlLayout;
+    else if (layout?.parentType) state.lastBasicType = layout.parentType;
+  }
+
+  renderLayoutNav();
   renderMockup();
   renderBrowser();
   renderHeroBgPicker();

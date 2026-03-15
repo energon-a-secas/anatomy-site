@@ -1,23 +1,87 @@
 import { state } from './state.js';
-import { renderTabs, renderMockup, renderBrowser, renderHeroBgPicker, applyHeroBg,
-         showTooltip, hideTooltip, syncBrowserHighlight, updateChecklistProgress } from './render.js';
+import { LAYOUTS } from './data.js';
+import { renderLayoutNav, renderMockup, renderBrowser, renderHeroBgPicker, applyHeroBg,
+         showTooltip, hideTooltip, syncBrowserHighlight } from './render.js';
 import { debounce } from './utils.js';
 
 let currentHovered = null;
 
+// Close all dropdown menus
+function closeAllDropdowns() {
+  document.querySelectorAll('.layout-dropdown-menu').forEach(menu => {
+    menu.classList.remove('open');
+  });
+  document.querySelectorAll('.layout-dropdown-btn').forEach(btn => {
+    btn.setAttribute('aria-expanded', 'false');
+  });
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.layout-dropdown')) {
+    closeAllDropdowns();
+  }
+});
+
+// Close dropdowns on Escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeAllDropdowns();
+  }
+});
+
 export function initEvents() {
 
-  // Layout tab clicks
-  document.getElementById('layoutTabs').addEventListener('click', e => {
-    const btn = e.target.closest('[data-layout]');
-    if (!btn) return;
-    state.activeLayout = btn.dataset.layout;
-    state.activeComp = null;
-    renderTabs();
-    renderMockup();
-    renderBrowser();
-    hideTooltip();
-    currentHovered = null;
+  // Layout dropdown interactions
+  document.getElementById('layoutNav').addEventListener('click', e => {
+    const dropdownBtn = e.target.closest('.layout-dropdown-btn');
+    const menuItem = e.target.closest('.layout-dropdown-item');
+
+    if (dropdownBtn) {
+      // Toggle dropdown menu
+      const category = dropdownBtn.dataset.category;
+      const menu = document.querySelector(`.layout-dropdown-menu[data-category="${category}"]`);
+      const isOpen = menu.classList.contains('open');
+
+      // Close all menus first
+      closeAllDropdowns();
+
+      // Open this menu if it wasn't already open
+      if (!isOpen) {
+        menu.classList.add('open');
+        dropdownBtn.setAttribute('aria-expanded', 'true');
+      }
+    } else if (menuItem) {
+      // Select layout from dropdown
+      state.activeLayout = menuItem.dataset.layout;
+      state.activeComp = null;
+      closeAllDropdowns();
+
+      // Track the last basic type for industry dropdown filtering
+      const selectedLayout = LAYOUTS.find(l => l.id === state.activeLayout);
+      if (selectedLayout?.category === 'basic') {
+        state.lastBasicType = selectedLayout.id;
+        // Auto-switch to first matching industry layout
+        const firstIndustry = LAYOUTS.find(l => l.category === 'industry' && l.parentType === selectedLayout.id);
+        if (firstIndustry) {
+          state.activeLayout = firstIndustry.id;
+        }
+      } else if (selectedLayout?.category === 'industry' && selectedLayout.parentType) {
+        state.lastBasicType = selectedLayout.parentType;
+      }
+
+      // Update URL for sharing
+      const url = new URL(window.location);
+      url.searchParams.set('layout', state.activeLayout);
+      history.replaceState(null, '', url);
+
+      // Re-render
+      renderLayoutNav();
+      renderMockup();
+      renderBrowser();
+      hideTooltip();
+      currentHovered = null;
+    }
   });
 
   // Component hover in mockup
@@ -55,12 +119,12 @@ export function initEvents() {
       if (foundIn.length > 0) {
         state.activeLayout = foundIn[0]; // Switch to first layout that has this component
         state.activeComp = null;
-        renderTabs();
+        renderLayoutNav();
         renderMockup();
         renderBrowser();
         hideTooltip();
         currentHovered = null;
-        
+
         // After render, scroll to the component
         setTimeout(() => {
           const target = document.querySelector(`#mockupFrame [data-comp="${id}"]`);
@@ -128,24 +192,4 @@ export function initEvents() {
     applyHeroBg();
   });
 
-  // Checklist checkbox toggle
-  document.getElementById('mockupFrame').addEventListener('change', e => {
-    if (!e.target.classList.contains('checklist-checkbox')) return;
-    const itemId = e.target.id.replace('check-', '');
-    const checked = new Set(JSON.parse(localStorage.getItem('checklistChecked') || '[]'));
-    
-    if (e.target.checked) {
-      checked.add(itemId);
-    } else {
-      checked.delete(itemId);
-    }
-    
-    localStorage.setItem('checklistChecked', JSON.stringify([...checked]));
-    
-    // Update visual state
-    const item = e.target.closest('.checklist-item');
-    if (item) item.classList.toggle('checked', e.target.checked);
-    
-    updateChecklistProgress();
-  });
 }

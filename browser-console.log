@@ -1,0 +1,5 @@
+Total messages: 3 (Errors: 3, Warnings: 0)
+
+The requested module './render.js' does not provide an export named 'renderTabs'
+The requested module './render.js' does not provide an export named 'renderTabs'
+The requested module './render.js' does not provide an export named 'renderTabs'
