@@ -542,3 +542,284 @@ export const INDUSTRY_LABELS = {
   saas:      'SaaS',
   fintech:   'Fintech',
 };
+
+// ── Component Relationships ───────────────────────────────────────────────────
+// Shows how components work together in common patterns
+export const COMPONENT_RELATIONSHIPS = [
+  {
+    id: 'navbar-flow',
+    title: 'Navbar to Page Flow',
+    pattern: 'Logo → Navigation Links → CTA Button → User Menu',
+    description: 'The navbar guides users through the primary journey. Logo serves as home anchor, navigation links provide wayfinding, CTA drives conversion, user menu handles account needs.',
+    components: ['logo', 'navbar', 'cta-button', 'user-menu'],
+    example: 'Ecommerce: Logo > Shop Categories > Cart Icon (with count) > User Account'
+  },
+  {
+    id: 'hero-to-conversion',
+    title: 'Hero to Conversion Path',
+    pattern: 'Hero Section → Social Proof → Feature Cards → Pricing CTA',
+    description: 'Classic landing page flow: hook attention with hero, build credibility with social proof, explain value with features, then convert with pricing CTA.',
+    components: ['hero-section', 'stat-block', 'feature-card', 'cta-button'],
+    example: 'SaaS: Hero headline > Customer logos > 3 feature boxes > "Start Free Trial" button'
+  },
+  {
+    id: 'content-to-action',
+    title: 'Content to Action Flow',
+    pattern: 'Blog Post → Newsletter Signup → Confirmation → Welcome Series',
+    description: 'Content marketing funnel: engage with valuable content, capture email, confirm subscription, nurture with email series.',
+    components: ['content-block', 'subscribe-form', 'alert-success', 'newsletter-section'],
+    example: 'Blog: Article content > "Subscribe for more" box > Confirmation toast > Welcome email'
+  },
+  {
+    id: 'ecommerce-journey',
+    title: 'Ecommerce Purchase Journey',
+    pattern: 'Product Card → Product Details → Add to Cart → Checkout → Confirmation',
+    description: 'Core ecommerce flow optimized for conversion. Each step removes friction and builds trust.',
+    components: ['product-card', 'product-gallery', 'add-to-cart-btn', 'cart-sidebar', 'checkout-form', 'order-confirmation'],
+    example: 'Amazon-style: Product listing > Details page > One-click add > Slide-out cart > Streamlined checkout'
+  },
+  {
+    id: 'dashboard-analytics',
+    title: 'Dashboard Analytics Flow',
+    pattern: 'Stat Cards → Charts → Data Tables → Filter Controls → Export Actions',
+    description: 'Analytics dashboard pattern showing overview metrics first, then detailed data with interactive filtering and export capabilities.',
+    components: ['stat-block', 'chart-line', 'data-table', 'filter-dropdown', 'export-button'],
+    example: 'Analytics: KPI cards at top > Line charts for trends > Sortable table > Date range filter > CSV export'
+  }
+];
+
+// ── Design System Fundamentals ───────────────────────────────────────────────
+// Core principles for building consistent UI systems
+export const DESIGN_SYSTEM_FUNDAMENTALS = [
+  {
+    principle: 'Typography Hierarchy',
+    description: 'Establish clear text styles: H1-H6 headings, body text, captions, buttons. Define font sizes, weights, line heights for each.',
+    examples: [
+      'H1: 48px/56px, weight 800 - Use once per page for main title',
+      'H2: 32px/40px, weight 700 - Section headers',
+      'Body: 16px/24px, weight 400 - Main content',
+      'Caption: 12px/16px, weight 500 - Labels and metadata'
+    ],
+    componentsAffected: ['headings', 'text-block', 'card', 'button']
+  },
+  {
+    principle: 'Spacing System',
+    description: 'Use consistent spacing scale (4px, 8px, 16px, 24px, 32px, 48px, 64px) for all margins, padding, and gaps.',
+    examples: [
+      '4px: Tight spacing between related items',
+      '16px: Standard spacing between elements',
+      '32px: Section spacing',
+      '64px: Major section breaks'
+    ],
+    componentsAffected: ['card', 'section', 'grid', 'form']
+  },
+  {
+    principle: 'Color Palette Structure',
+    description: 'Define core colors: primary, secondary, accent, success, warning, error, neutral. Create tints and shades for each.',
+    examples: [
+      'Primary: Main brand color, uses for CTAs and key actions',
+      'Success: Green for positive actions and confirmations',
+      'Error: Red for errors and destructive actions',
+      'Neutrals: Grays for text and backgrounds'
+    ],
+    componentsAffected: ['button', 'alert', 'badge', 'form']
+  },
+  {
+    principle: 'Interactive States',
+    description: 'Design states for all interactive elements: default, hover, focus, active, disabled, loading.',
+    examples: [
+      'Button hover: Darker background with subtle scale (1.02x)',
+      'Focus: Clear ring or outline for keyboard navigation',
+      'Disabled: 50% opacity, no pointer events',
+      'Loading: Spinner, disabled state, and opacity change'
+    ],
+    componentsAffected: ['button', 'link', 'input', 'select']
+  },
+  {
+    principle: 'Component Composition',
+    description: 'Build complex components from simple ones. Buttons contain icons and text. Cards contain headers, bodies, and actions.',
+    examples: [
+      'Card = Header (title + close button) + Body (content) + Footer (actions)',
+      'Navbar = Logo + Navigation + Search + User Menu + CTA',
+      'List Item = Icon + Content (title + description) + Actions'
+    ],
+    componentsAffected: ['card', 'modal', 'list', 'navbar']
+  }
+];
+
+// ── Accessibility Guidelines ─────────────────────────────────────────────────
+// WCAG 2.1 recommendations for each component type
+export const ACCESSIBILITY_GUIDELINES = {
+  navigation: {
+    guidelines: [
+      'Use semantic <nav> element',
+      'Provide skip link to main content',
+      'Use proper ARIA labels for screen readers',
+      'Ensure keyboard navigation with arrow keys',
+      'Maintain 3:1 contrast for nav items'
+    ],
+    examples: {
+      navbar: '<nav aria-label="Main navigation">',
+      skipLink: '<a href="#main" class="skip-link">Skip to main content</a>',
+      dropdown: 'aria-expanded, aria-haspopup for dropdown menus'
+    }
+  },
+  forms: {
+    guidelines: [
+      'Associate labels with inputs using for/id',
+      'Mark required fields with aria-required',
+      'Provide clear error messages with suggestions',
+      'Support form validation for screen readers',
+      'Ensure touch targets are 44x44px minimum'
+    ],
+    examples: {
+      label: '<label for="email">Email *</label><input id="email" required>',
+      error: 'aria-describedby="email-error" on input',
+      errorMessage: '<div id="email-error" role="alert">Invalid email format</div>'
+    }
+  },
+  media: {
+    guidelines: [
+      'All images must have alt text (empty for decorative)',
+      'Provide transcripts for videos',
+      'Caption audio content',
+      'Never use images of text',
+      'Pause/play controls for animated content'
+    ],
+    examples: {
+      informative: 'alt="Bar chart showing 40% increase in sales"',
+      decorative: 'alt="" for decorative images',
+      video: '<track kind="captions" src="captions.vtt">'
+    }
+  },
+  layout: {
+    guidelines: [
+      'Use proper heading hierarchy (H1 → H2 → H3)',
+      'Maintain logical reading order',
+      'Avoid layout tables, use semantic elements',
+      'Provide landmarks (header, main, footer, aside)',
+      'Ensure responsive design zooms to 200%'
+    ],
+    examples: {
+      headings: 'One H1 per page, use CSS for visual sizing',
+      landmarks: '<header>, <main>, <footer>, <nav>, <aside>',
+      responsive: 'Test at 320px width and 200% zoom'
+    }
+  }
+};
+
+// ── Framework-Specific Implementations ───────────────────────────────────────
+// Code examples for popular frameworks
+export const FRAMEWORK_IMPLEMENTATIONS = {
+  react: [
+    {
+      component: 'Button',
+      library: '@radix-ui/react-button',
+      code: `import * as React from 'react';
+import { Button as RadixButton } from '@radix-ui/react-button';
+
+const Button = ({ children, variant = 'primary', ...props }) => (
+  <RadixButton
+    className={\`btn btn-\${variant}\`}
+    {...props}
+  >
+    {children}
+  </RadixButton>
+);`
+    },
+    {
+      component: 'Modal',
+      library: '@headlessui/react',
+      code: `import { Dialog } from '@headlessui/react';
+import { useState } from 'react';
+
+function Modal() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>Open</button>
+
+      <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+        <Dialog.Panel>
+          <Dialog.Title>Modal Title</Dialog.Title>
+          <button onClick={() => setIsOpen(false)}>Close</button>
+        </Dialog.Panel>
+      </Dialog>
+    </>
+  );
+}`
+    }
+  ],
+  vue: [
+    {
+      component: 'Card',
+      library: 'PrimeVue',
+      code: `<template>
+  <Card>
+    <template #title>Card Title</template>
+    <template #content>
+      <p>Card content goes here.</p>
+    </template>
+    <template #footer>
+      <Button icon="pi pi-check" label="Save" />
+    </template>
+  </Card>
+</template>`
+    },
+    {
+      component: 'Data Table',
+      library: 'Element Plus',
+      code: `<template>
+  <el-table :data="tableData">
+    <el-table-column prop="name" label="Name" />
+    <el-table-column prop="date" label="Date" />
+  </el-table>
+</template>`
+    }
+  ],
+  vanilla: [
+    {
+      component: 'Accordion',
+      code: `class Accordion {
+  constructor(element) {
+    this.element = element;
+    this.buttons = element.querySelectorAll('.accordion-button');
+
+    this.buttons.forEach(button => {
+      button.addEventListener('click', () => this.toggle(button));
+    });
+  }
+
+  toggle(button) {
+    const content = button.nextElementSibling;
+    const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+    button.setAttribute('aria-expanded', !isOpen);
+    content.hidden = isOpen;
+  }
+}`
+    },
+    {
+      component: 'Tabs',
+      code: `function initTabs() {
+  const tabs = document.querySelectorAll('[role="tab"]');
+  const panels = document.querySelectorAll('[role="tabpanel"]');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('aria-controls');
+
+      // Deactivate all tabs
+      tabs.forEach(t => t.setAttribute('aria-selected', false));
+      panels.forEach(p => p.hidden = true);
+
+      // Activate clicked tab
+      tab.setAttribute('aria-selected', true);
+      document.getElementById(target).hidden = false;
+    });
+  });
+}`
+    }
+  ]
+};

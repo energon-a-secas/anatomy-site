@@ -31,34 +31,22 @@ const LAYOUT_FNS = {
 // ── Layout navigation (dropdown categories) ───────────────────────────────────
 export function renderLayoutNav() {
   const el = document.getElementById('layoutNav');
-  const categories = {
-    basic: 'Basic Types',
-    industry: 'Industry Layouts'
-  };
 
-  // Determine the active basic type for filtering industry layouts
-  const activeLayout = LAYOUTS.find(l => l.id === state.activeLayout);
-  const activeBasicType = state.lastBasicType || 'landing';
-
-  el.innerHTML = Object.entries(categories).map(([catId, catLabel]) => {
-    let layoutsInCat = LAYOUTS.filter(l => l.category === catId);
-
-    // Filter industry layouts based on the active basic type
-    if (catId === 'industry') {
-      const filtered = layoutsInCat.filter(l => l.parentType === activeBasicType);
-      if (filtered.length > 0) {
-        layoutsInCat = filtered;
-      }
-      // If no matches (e.g., login, components), show all as fallback
+  // Show all layouts grouped by category
+  const layoutsByCategory = {};
+  LAYOUTS.forEach(layout => {
+    if (!layoutsByCategory[layout.category]) {
+      layoutsByCategory[layout.category] = [];
     }
+    layoutsByCategory[layout.category].push(layout);
+  });
 
+  const activeLayout = LAYOUTS.find(l => l.id === state.activeLayout);
+
+  el.innerHTML = Object.entries(layoutsByCategory).map(([catId, layouts]) => {
+    const catLabel = catId === 'basic' ? 'Basic Types' : 'Industry Layouts';
     const buttonLabel = activeLayout?.category === catId ? activeLayout.label : catLabel;
     const isActive = activeLayout?.category === catId;
-
-    // Show the parent basic type label for industry items
-    const basicTypeLabel = catId === 'industry'
-      ? LAYOUTS.find(l => l.id === activeBasicType)?.label || ''
-      : '';
 
     return `
       <div class="layout-dropdown">
@@ -69,8 +57,7 @@ export function renderLayoutNav() {
           </svg>
         </button>
         <div class="layout-dropdown-menu" data-category="${catId}" role="menu">
-          ${catId === 'industry' && basicTypeLabel ? `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);padding:6px 12px 4px">Based on ${basicTypeLabel}</div>` : ''}
-          ${layoutsInCat.map(l => {
+          ${layouts.map(l => {
             return `
             <button class="layout-dropdown-item ${state.activeLayout === l.id ? 'active' : ''}"
                     data-layout="${l.id}" role="menuitemradio" aria-checked="${state.activeLayout === l.id}">
@@ -233,11 +220,39 @@ export function showTooltip(compId, triggerEl) {
   }
 
   tt.classList.remove('hidden');
+
+  // Add pinned indicator if this component is pinned
+  if (state.pinnedComp === compId) {
+    tt.classList.add('pinned');
+  } else {
+    tt.classList.remove('pinned');
+  }
+
   positionTooltip(tt, triggerEl);
 }
 
 export function hideTooltip() {
-  document.getElementById('tooltip').classList.add('hidden');
+  const tt = document.getElementById('tooltip');
+  if (!tt) return;
+  // Don't hide if tooltip is pinned
+  if (state.pinnedComp !== null) return;
+  tt.classList.add('hidden');
+  tt.classList.remove('pinned');
+}
+
+export function togglePinTooltip(compId) {
+  const tt = document.getElementById('tooltip');
+  if (state.pinnedComp === compId) {
+    // Unpin if clicking the same component
+    state.pinnedComp = null;
+    tt.classList.remove('pinned');
+    hideTooltip();
+  } else {
+    // Pin the new component
+    state.pinnedComp = compId;
+    tt.classList.add('pinned');
+  }
+  renderBrowser();
 }
 
 function positionTooltip(tt, triggerEl) {
@@ -263,7 +278,10 @@ function positionTooltip(tt, triggerEl) {
 // ── Highlight browser item matching active comp ───────────────────────────────
 export function syncBrowserHighlight(compId) {
   document.querySelectorAll('.browser-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.compId === compId);
+    const isActive = el.dataset.compId === compId;
+    const isPinned = el.dataset.compId === state.pinnedComp;
+    el.classList.toggle('active', isActive);
+    el.classList.toggle('pinned', isPinned);
   });
 }
 

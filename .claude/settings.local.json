@@ -64,7 +64,9 @@
       "mcp__plugin_playwright_playwright__*",
       "WebSearch",
       "WebFetch(domain:lucianoadonis.com)",
-      "WebFetch(domain:guild.ehq.cl)"
+      "WebFetch(domain:guild.ehq.cl)",
+      "WebFetch(domain:pub-40d1b6bde82c4e0eb08cf6cbf7a7a8ac.r2.dev)",
+      "WebFetch(domain:localhost)"
     ],
     "deny": []
   },

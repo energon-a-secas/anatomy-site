@@ -55,20 +55,8 @@ export function initEvents() {
       // Select layout from dropdown
       state.activeLayout = menuItem.dataset.layout;
       state.activeComp = null;
+      state.pinnedComp = null; // Unpin when switching layouts
       closeAllDropdowns();
-
-      // Track the last basic type for industry dropdown filtering
-      const selectedLayout = LAYOUTS.find(l => l.id === state.activeLayout);
-      if (selectedLayout?.category === 'basic') {
-        state.lastBasicType = selectedLayout.id;
-        // Auto-switch to first matching industry layout
-        const firstIndustry = LAYOUTS.find(l => l.category === 'industry' && l.parentType === selectedLayout.id);
-        if (firstIndustry) {
-          state.activeLayout = firstIndustry.id;
-        }
-      } else if (selectedLayout?.category === 'industry' && selectedLayout.parentType) {
-        state.lastBasicType = selectedLayout.parentType;
-      }
 
       // Update URL for sharing
       const url = new URL(window.location);
@@ -84,7 +72,7 @@ export function initEvents() {
     }
   });
 
-  // Component hover in mockup
+  // Component hover and click in mockup
   const mockupArea = document.getElementById('mockupArea');
 
   mockupArea.addEventListener('mouseover', e => {
@@ -92,7 +80,15 @@ export function initEvents() {
     if (comp === currentHovered) return;
     if (currentHovered) currentHovered.classList.remove('hovered');
     currentHovered = comp;
-    if (!comp) { hideTooltip(); state.activeComp = null; syncBrowserHighlight(null); return; }
+    if (!comp) {
+      // Only hide tooltip if nothing is pinned
+      if (state.pinnedComp === null) {
+        hideTooltip();
+        state.activeComp = null;
+        syncBrowserHighlight(null);
+      }
+      return;
+    }
     comp.classList.add('hovered');
     const id = comp.dataset.comp;
     state.activeComp = id;
@@ -101,10 +97,50 @@ export function initEvents() {
   });
 
   mockupArea.addEventListener('mouseleave', () => {
-    if (currentHovered) { currentHovered.classList.remove('hovered'); currentHovered = null; }
-    hideTooltip();
-    state.activeComp = null;
-    syncBrowserHighlight(null);
+    if (currentHovered) {
+      currentHovered.classList.remove('hovered');
+      currentHovered = null;
+    }
+    // Only hide if not pinned
+    if (state.pinnedComp === null) {
+      hideTooltip();
+      state.activeComp = null;
+      syncBrowserHighlight(null);
+    }
+  });
+
+  // Click to pin tooltip
+  mockupArea.addEventListener('click', e => {
+    const comp = e.target.closest('[data-comp]');
+    if (!comp) return;
+
+    e.stopPropagation();
+    const id = comp.dataset.comp;
+
+    // Toggle pin state
+    if (state.pinnedComp === id) {
+      // Unpin
+      state.pinnedComp = null;
+      hideTooltip();
+      syncBrowserHighlight(null);
+    } else {
+      // Pin this component
+      state.pinnedComp = id;
+      state.activeComp = id;
+      showTooltip(id, comp);
+      syncBrowserHighlight(id);
+    }
+  });
+
+  // Click outside to unpin
+  document.addEventListener('click', e => {
+    if (!e.target.closest('[data-comp]') && !e.target.closest('.anatomy-tooltip')) {
+      if (state.pinnedComp !== null) {
+        state.pinnedComp = null;
+        hideTooltip();
+        syncBrowserHighlight(null);
+      }
+    }
   });
 
   // Browser item click → scroll to component in mockup OR switch to layout with component
@@ -190,6 +226,31 @@ export function initEvents() {
     state.heroBg = btn.dataset.bg;
     renderHeroBgPicker();
     applyHeroBg();
+  });
+
+  // Random layout button
+  document.getElementById('randomLayoutBtn').addEventListener('click', () => {
+    // Unpin any pinned tooltip
+    state.pinnedComp = null;
+    hideTooltip();
+
+    // Select random layout
+    const randomIndex = Math.floor(Math.random() * LAYOUTS.length);
+    const randomLayout = LAYOUTS[randomIndex];
+    state.activeLayout = randomLayout.id;
+    state.activeComp = null;
+    currentHovered = null;
+
+    // Update URL
+    const url = new URL(window.location);
+    url.searchParams.set('layout', state.activeLayout);
+    history.replaceState(null, '', url);
+
+    // Re-render
+    renderLayoutNav();
+    renderMockup();
+    renderBrowser();
+    syncBrowserHighlight(null);
   });
 
 }

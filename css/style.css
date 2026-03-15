@@ -236,12 +236,28 @@ body {
   background: var(--accent-dim);
   color: var(--accent-bright);
 }
+.browser-item.pinned {
+  background: rgba(255, 215, 0, 0.15);
+  color: #FFD700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  position: relative;
+}
+.browser-item.pinned::after {
+  content: '📌';
+  position: absolute;
+  right: 8px;
+  font-size: 0.8rem;
+}
 .browser-item .browser-dot {
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--border-strong); flex-shrink: 0;
   transition: background var(--dur);
 }
 .browser-item.active .browser-dot { background: var(--accent); }
+.browser-item.pinned .browser-dot {
+  background: #FFD700;
+  box-shadow: 0 0 4px #FFD700;
+}
 .browser-item.missing {
   opacity: 0.4;
   cursor: pointer;
@@ -348,6 +364,15 @@ body {
   box-shadow: 0 12px 40px rgba(0,0,0,0.6);
   pointer-events: none;
   transition: opacity 0.15s;
+}
+.anatomy-tooltip.pinned {
+  border-color: #FFD700;
+  box-shadow: 0 12px 40px rgba(255, 215, 0, 0.3);
+  pointer-events: auto; /* Allow interaction when pinned */
+}
+.anatomy-tooltip.pinned .tt-name::after {
+  content: ' 📌';
+  font-size: 0.9em;
 }
 .anatomy-tooltip.hidden { opacity: 0; }
 

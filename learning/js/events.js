@@ -78,6 +78,19 @@ export function initEvents() {
         renderContent();
       }
     });
+
+    // Copy framework code button
+    const codeCopyBtn = e.target.closest('.code-copy-btn');
+    if (codeCopyBtn) {
+      const code = codeCopyBtn.dataset.code;
+      navigator.clipboard.writeText(code).then(() => {
+        codeCopyBtn.textContent = 'Copied!';
+        setTimeout(() => {
+          codeCopyBtn.textContent = 'Copy Code';
+        }, 1500);
+      });
+      return;
+    }
   }
 
   // ── Search input ──────────────────────────────────────────────────────────
