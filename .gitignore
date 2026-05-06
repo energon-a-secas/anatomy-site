@@ -17,3 +17,5 @@ package-lock.json
 # ── Secrets — never commit ────────────────────────────────────────────────────
 .env
 .env.*
+serve.py
+server.pid

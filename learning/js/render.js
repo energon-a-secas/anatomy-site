@@ -14,6 +14,7 @@ const TABS = [
   { id: 'patterns',     label: 'Component Patterns' },
   { id: 'design',       label: 'Design Systems' },
   { id: 'accessibility', label: 'Accessibility Guide' },
+  { id: 'architecture', label: 'Architecture Guide' },
   { id: 'frameworks',   label: 'Framework Code' },
 ];
 
@@ -63,6 +64,8 @@ export function renderContent() {
     renderDesignSystems(area);
   } else if (state.activeTab === 'accessibility') {
     renderAccessibility(area);
+  } else if (state.activeTab === 'architecture') {
+    renderArchitecture(area);
   } else if (state.activeTab === 'frameworks') {
     renderFrameworks(area);
   }
@@ -327,6 +330,212 @@ function renderAccessibility(area) {
       </div>
     `;
   }
+
+  html += '</div>';
+  area.innerHTML = html;
+}
+
+// ── Architecture Guide ───────────────────────────────────────────────────
+function renderArchitecture(area) {
+  const q = state.searchQuery.toLowerCase();
+
+  let html = '<div class="architecture-container">';
+
+  // Introduction card
+  html += `
+    <div class="intro-card">
+      <h3 class="intro-title">Choosing the Right Architecture</h3>
+      <p class="intro-text">This guide helps you decide between static HTML, SPAs, SSR, SSG, and helps you pick frameworks based on your project's needs. <strong><a href="../learning/frameworks-decision-guide.md" target="_blank">View Full Guide →</a></strong></p>
+    </div>
+  `;
+
+  // Architecture comparison table
+  html += `
+    <div class="decision-table-card">
+      <h3 class="table-title">Architecture Decision Matrix</h3>
+      <div class="decision-table-wrapper">
+        <table class="decision-table">
+          <thead>
+            <tr>
+              <th>Project Type</th>
+              <th>Static</th>
+              <th>SPA</th>
+              <th>SSR</th>
+              <th>SSG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Landing page</strong></td>
+              <td class="yes">✅ Yes</td>
+              <td class="no">❌ No</td>
+              <td class="maybe">⚠️ Maybe</td>
+              <td class="yes">✅ Yes</td>
+            </tr>
+            <tr>
+              <td><strong>Corporate site</strong></td>
+              <td class="yes">✅ Yes</td>
+              <td class="no">❌ No</td>
+              <td class="maybe">⚠️ Maybe</td>
+              <td class="yes">✅ Yes</td>
+            </tr>
+            <tr>
+              <td><strong>Blog</strong></td>
+              <td class="no">❌ No</td>
+              <td class="no">❌ No</td>
+              <td class="maybe">⚠️ Maybe</td>
+              <td class="yes">✅ Yes</td>
+            </tr>
+            <tr>
+              <td><strong>Web App</strong></td>
+              <td class="no">❌ No</td>
+              <td class="yes">✅ Yes</td>
+              <td class="yes">✅ Yes</td>
+              <td class="no">❌ No</td>
+            </tr>
+            <tr>
+              <td><strong>Dashboard</strong></td>
+              <td class="no">❌ No</td>
+              <td class="yes">✅ Yes</td>
+              <td class="yes">✅ Yes</td>
+              <td class="no">❌ No</td>
+            </tr>
+            <tr>
+              <td><strong>E-commerce</strong></td>
+              <td class="maybe">⚠️ Maybe</td>
+              <td class="no">❌ No</td>
+              <td class="yes">✅ Yes</td>
+              <td class="yes">✅ Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  // Quick comparison sections
+  const sections = [
+    {
+      title: 'Architecture Types',
+      id: 'architecture-types',
+      items: [
+        {
+          name: 'Static HTML/CSS/JS',
+          useWhen: 'Simple landing pages, perfect SEO, maximum speed',
+          pros: ['Zero dependencies', 'Instant loading', 'Perfect SEO', 'No build step'],
+          cons: ['Manual DOM manipulation', 'No component reusability', 'Hard to scale']
+        },
+        {
+          name: 'Single Page Application (SPA)',
+          useWhen: 'Web apps behind auth, dashboards, interactive tools',
+          pros: ['App-like experience', 'Rich interactivity', 'State persists', 'Can work offline'],
+          cons: ['Poor SEO', 'Heavy initial load', 'Requires JavaScript', 'Hydration complexity']
+        },
+        {
+          name: 'Server-Side Rendering (SSR)',
+          useWhen: 'Dynamic user-specific content, SEO + interactivity needed',
+          pros: ['Good SEO', 'Fast first paint', 'Always up-to-date'],
+          cons: ['Server required', 'Slower TTFB', 'Complex setup', 'Higher hosting costs']
+        },
+        {
+          name: 'Static Site Generation (SSG)',
+          useWhen: 'Blogs, docs, marketing sites, content that rarely changes',
+          pros: ['Excellent SEO', 'Fastest performance', 'Free hosting', 'Great security'],
+          cons: ['Build time increases', 'Changes require rebuild', 'Cant be truly dynamic']
+        }
+      ]
+    },
+    {
+      title: 'Frontend Frameworks',
+      id: 'frontend-frameworks',
+      items: [
+        {
+          name: 'React',
+          useWhen: 'Large complex apps, rich ecosystem needed, team knows JS well',
+          pros: ['Largest ecosystem', 'Most jobs', 'React Native for mobile', 'Maximum flexibility'],
+          cons: ['Steep learning curve', 'Bundle size medium', 'Lots of decisions']
+        },
+        {
+          name: 'Vue.js',
+          useWhen: 'Gentle learning curve, teams coming from jQuery, good docs',
+          pros: ['Clear excellent docs', 'Single File Components', 'Gentle learning curve', 'Small bundle'],
+          cons: ['Smaller job market', 'Less enterprise adoption']
+        },
+        {
+          name: 'Angular',
+          useWhen: 'Enterprise apps, large teams, TypeScript, long-term maintenance',
+          pros: ['Full-featured framework', 'TypeScript default', 'Powerful CLI', 'Everything included'],
+          cons: ['Steep learning curve', 'Large bundle size', 'Complexity overhead']
+        },
+        {
+          name: 'Svelte',
+          useWhen: 'Performance-critical apps, small bundles, simpler mental model',
+          pros: ['Tiny bundle size', 'No virtual DOM', 'Write less code', 'Compile-time optimizations'],
+          cons: ['Smaller ecosystem', 'Fewer jobs', 'Newer technology']
+        }
+      ]
+    },
+    {
+      title: 'CSS Approaches',
+      id: 'css-approaches',
+      items: [
+        {
+          name: 'Tailwind CSS',
+          useWhen: 'Rapid prototyping, component-based apps, want consistency',
+          pros: ['Fast development', 'No naming fatigue', 'Consistent spacing/colors', 'Small bundle (purged)'],
+          cons: ['Verbose HTML', 'Learning curve', 'Can look "samey"', 'Not great for unique art direction']
+        },
+        {
+          name: 'Traditional CSS (BEM)',
+          useWhen: 'Marketing sites, unique designs, full design control',
+          pros: ['Full control', 'Familar', 'Great for art-directed pages', 'Can be very organized'],
+          cons: ['Naming is hard', 'Context switching', 'Large CSS files', 'Specificity wars']
+        }
+      ]
+    }
+  ];
+
+  sections.forEach(section => {
+    html += `
+      <div class="section-card">
+        <h3 class="section-title">${esc(section.title)}</h3>
+        <div class="comparison-items">
+    `;
+
+    section.items.forEach(item => {
+      html += `
+        <div class="comparison-item">
+          <h4 class="item-name">${esc(item.name)}</h4>
+          <p class="item-use-when"><strong>When to use:</strong> ${esc(item.useWhen)}</p>
+          <div class="pros-cons">
+            <div class="pros">
+              <h5>Pros:</h5>
+              <ul>
+                ${item.pros.map(pro => `<li>${esc(pro)}</li>`).join('')}
+              </ul>
+            </div>
+            <div class="cons">
+              <h5>Cons:</h5>
+              <ul>
+                ${item.cons.map(con => `<li>${esc(con)}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += '</div></div>';
+  });
+
+  // Final CTA to read full guide
+  html += `
+    <div class="cta-card">
+      <h3 class="cta-title">Need More Details?</h3>
+      <p class="cta-text">Read the complete decision guide with real-world examples, framework comparisons, and decision flowcharts.</p>
+      <a href="../learning/frameworks-decision-guide.md" target="_blank" class="cta-button">Read Full Guide →</a>
+    </div>
+  `;
 
   html += '</div>';
   area.innerHTML = html;
