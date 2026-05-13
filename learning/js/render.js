@@ -6,8 +6,9 @@ import {
   COMPONENT_RELATIONSHIPS, DESIGN_SYSTEM_FUNDAMENTALS,
   ACCESSIBILITY_GUIDELINES, FRAMEWORK_IMPLEMENTATIONS,
 } from './data.js';
+import { COMPONENTS as WIRE_COMPONENTS } from '../../js/data.js';
 
-const TABS = [
+export const TABS = [
   { id: 'checklist',    label: 'Production Checklist' },
   { id: 'mistakes',     label: 'Common Mistakes' },
   { id: 'prompts',      label: 'AI Prompt Guide' },
@@ -27,6 +28,11 @@ function esc(s) {
   return d.innerHTML;
 }
 
+function wireframeHrefForComp(compId) {
+  if (!compId || !WIRE_COMPONENTS[compId]) return null;
+  return `../?comp=${encodeURIComponent(compId)}`;
+}
+
 function getChecked() {
   try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
   catch { return []; }
@@ -41,9 +47,12 @@ export function renderTabs() {
   const el = document.getElementById('tabBar');
   if (!el) return;
   el.innerHTML = TABS.map(t =>
-    `<button class="tab-btn${t.id === state.activeTab ? ' active' : ''}"
+    `<button type="button" class="tab-btn${t.id === state.activeTab ? ' active' : ''}"
+             id="learning-tab-${t.id}"
              data-tab="${t.id}" role="tab"
-             aria-selected="${t.id === state.activeTab}">${esc(t.label)}</button>`
+             aria-selected="${t.id === state.activeTab}"
+             aria-controls="contentArea"
+             tabindex="${t.id === state.activeTab ? '0' : '-1'}">${esc(t.label)}</button>`
   ).join('');
 }
 
@@ -103,25 +112,25 @@ function renderChecklist(area) {
     const collapsed = state.collapsedCategories[catId];
 
     html += `<div class="checklist-category">
-      <div class="checklist-category-header" data-cat="${catId}">
-        <span style="font-size:1.1em;">${cat.icon}</span>
+      <button type="button" class="checklist-category-header" data-cat="${catId}" aria-expanded="${!collapsed}" aria-controls="cat-panel-${catId}">
+        <span style="font-size:1.1em;" aria-hidden="true">${cat.icon}</span>
         <span class="cat-label">${esc(cat.label)}</span>
         <span class="cat-count">${catChecked}/${filtered.length}</span>
-        <span class="cat-toggle${collapsed ? ' collapsed' : ''}">&#9660;</span>
-      </div>
+        <span class="cat-toggle${collapsed ? ' collapsed' : ''}" aria-hidden="true">&#9660;</span>
+      </button>
       <div class="checklist-progress"><div class="checklist-progress-bar" style="width:${catPct}%"></div></div>
-      <div class="checklist-items${collapsed ? ' hidden' : ''}">`;
+      <div class="checklist-items${collapsed ? ' hidden' : ''}" id="cat-panel-${catId}">`;
 
     for (const item of filtered) {
       const isChecked = checked.includes(item.id);
-      html += `<div class="checklist-item${isChecked ? ' checked' : ''}">
+      html += `<label class="checklist-item${isChecked ? ' checked' : ''}">
         <input type="checkbox" data-id="${item.id}" ${isChecked ? 'checked' : ''}>
-        <div class="checklist-item-content">
+        <span class="checklist-item-content">
           <span class="cl-label">${esc(item.label)}</span>
           <span class="cl-desc">${esc(item.desc)}</span>
-          <div class="cl-tip">${esc(item.tip)}</div>
-        </div>
-      </div>`;
+          <span class="cl-tip">${esc(item.tip)}</span>
+        </span>
+      </label>`;
     }
     html += '</div></div>';
   }
@@ -209,8 +218,15 @@ function renderPrompts(area) {
     hasResults = true;
 
     const compName = group.component.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const wf = wireframeHrefForComp(group.component);
+    const wfLink = wf
+      ? `<a class="prompt-wireframe-link" href="${esc(wf)}">Open on wireframe</a>`
+      : '';
     html += `<div class="prompt-group">
-      <div class="prompt-group-title">${esc(compName)}</div>`;
+      <div class="prompt-group-title-row">
+        <div class="prompt-group-title">${esc(compName)}</div>
+        ${wfLink}
+      </div>`;
 
     for (const ex of examples) {
       html += `<div class="prompt-card">
@@ -219,7 +235,9 @@ function renderPrompts(area) {
           <span class="industry-badge ${ex.industry}">${esc(INDUSTRY_LABELS[ex.industry] || ex.industry)}</span>
         </div>
         <div class="prompt-text">${esc(ex.prompt)}</div>
-        <button class="prompt-copy-btn" data-prompt="${esc(ex.prompt)}">Copy prompt</button>
+        <div class="prompt-card-actions">
+          <button type="button" class="prompt-copy-btn" data-prompt="${esc(ex.prompt)}">Copy prompt</button>
+        </div>
       </div>`;
     }
     html += '</div>';
@@ -263,7 +281,13 @@ function renderPatterns(area) {
           <strong>Example:</strong> ${esc(pattern.example)}
         </div>
         <div class="pattern-tags">
-          ${pattern.components.map(comp => `<span class="pattern-tag">${esc(comp)}</span>`).join('')}
+          ${pattern.components.map(comp => {
+            const href = wireframeHrefForComp(comp);
+            if (href) {
+              return `<a class="pattern-tag pattern-tag-link" href="${esc(href)}">${esc(comp)}</a>`;
+            }
+            return `<span class="pattern-tag">${esc(comp)}</span>`;
+          }).join('')}
         </div>
       </div>
     `;
@@ -345,7 +369,7 @@ function renderArchitecture(area) {
   html += `
     <div class="intro-card">
       <h3 class="intro-title">Choosing the Right Architecture</h3>
-      <p class="intro-text">This guide helps you decide between static HTML, SPAs, SSR, SSG, and helps you pick frameworks based on your project's needs. <strong><a href="../learning/frameworks-decision-guide.md" target="_blank">View Full Guide →</a></strong></p>
+      <p class="intro-text">This guide helps you decide between static HTML, SPAs, SSR, SSG, and helps you pick frameworks based on your project's needs. <strong><a href="./frameworks-decision-guide.html">View full guide →</a></strong></p>
     </div>
   `;
 
@@ -533,7 +557,7 @@ function renderArchitecture(area) {
     <div class="cta-card">
       <h3 class="cta-title">Need More Details?</h3>
       <p class="cta-text">Read the complete decision guide with real-world examples, framework comparisons, and decision flowcharts.</p>
-      <a href="../learning/frameworks-decision-guide.md" target="_blank" class="cta-button">Read Full Guide →</a>
+      <a href="./frameworks-decision-guide.html" class="cta-button">Read full guide →</a>
     </div>
   `;
 

@@ -1,7 +1,7 @@
 # ── macOS ─────────────────────────────────────────────────────────────────────
 .DS_Store
 
-# ── Playwright MCP (Claude Code browser automation — screenshots, logs) ───────
+# ── Playwright MCP (Claude Code browser automation: screenshots, logs) ───────
 .playwright-mcp/
 
 # ── Playwright test artifacts ─────────────────────────────────────────────────
@@ -14,7 +14,10 @@ node_modules/
 npm-debug.log*
 package-lock.json
 
-# ── Secrets — never commit ────────────────────────────────────────────────────
+# ── Blueprints: design reference docs (not for production) ──────────────────
+blueprints/
+
+# ── Secrets: never commit ────────────────────────────────────────────────────
 .env
 .env.*
 serve.py

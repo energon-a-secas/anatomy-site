@@ -110,9 +110,9 @@ Special layout (last tab) renders a component checklist with localStorage persis
 
 ## Development Commands
 
-- `make serve` — Start HTTP server on port 8820 (ES modules require HTTP, not file://)
-- `make kill` — Kill server on port 8820
-- `python3 -m http.server 8820` — Alternative if make isn't available
+- `make serve`: Start HTTP server on port 8820 (ES modules require HTTP, not file://)
+- `make kill`: Kill server on port 8820
+- `python3 -m http.server 8820`: Alternative if make isn't available
 
 ## Design Constraints
 

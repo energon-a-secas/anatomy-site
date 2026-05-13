@@ -21,7 +21,7 @@ export const CHECKLIST_CATEGORIES = {
 // ── Checklist items ─────────────────────────────────────────────────────────
 export const CHECKLIST_ITEMS = [
   // ── SEO & Metadata ──
-  { id: 'title', category: 'seo', label: 'Page title (<title> tag)', desc: 'Unique, descriptive title under 60 characters', tip: 'Add <title>Your Brand — Short Value Prop</title> in <head>. Keep under 60 chars to avoid truncation in search results.' },
+  { id: 'title', category: 'seo', label: 'Page title (<title> tag)', desc: 'Unique, descriptive title under 60 characters', tip: 'Add <title>Your Brand: Short Value Prop</title> in <head>. Keep under 60 chars to avoid truncation in search results.' },
   { id: 'meta-desc', category: 'seo', label: 'Meta description', desc: 'Compelling summary under 160 characters', tip: 'Add <meta name="description" content="..."> in <head>. Write 150-160 chars. This appears in search results under your title.' },
   { id: 'og-title', category: 'seo', label: 'Open Graph title', desc: 'Title shown when shared on social media', tip: 'Add <meta property="og:title" content="Your Title">. Can be same as page title or slightly different for social context.' },
   { id: 'og-desc', category: 'seo', label: 'Open Graph description', desc: 'Description for social media previews', tip: 'Add <meta property="og:description" content="...">. Can be same as meta description or tailored for social sharing.' },
@@ -447,7 +447,7 @@ export const PROMPT_LIBRARY = [
       {
         industry: 'ecommerce',
         title: 'Full Product Card',
-        prompt: 'Create a comprehensive ecommerce product card: (1) Product image with "New" badge in top-left, (2) Hover to show secondary product image, (3) Wishlist heart icon top-right, (4) Star rating with review count, (5) Product name truncated to 2 lines, (6) Current price large, original price with strikethrough, (7) "Add to Cart" button with loading state, (8) Quick view button on hover showing modal preview. Card should have smooth hover animation with subtle lift and shadow.'
+        prompt: 'Create a full ecommerce product card: (1) Product image with "New" badge in top-left, (2) Hover to show secondary product image, (3) Wishlist heart icon top-right, (4) Star rating with review count, (5) Product name truncated to 2 lines, (6) Current price large, original price with strikethrough, (7) "Add to Cart" button with loading state, (8) Quick view button on hover showing modal preview. Card should have smooth hover animation with subtle lift and shadow.'
       },
       {
         industry: 'ecommerce',

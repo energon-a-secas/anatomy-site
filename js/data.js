@@ -36,7 +36,7 @@ export const COMPONENTS = {
   wordmark: {
     name: 'Wordmark',
     also: ['Logotype', 'Brand Name Text'],
-    desc: 'The text portion of a logo — the brand name in a specific typeface. Stands alone or pairs with the logomark.',
+    desc: 'The text portion of a logo: the brand name in a specific typeface. Stands alone or pairs with the logomark.',
     variants: ['Regular weight', 'Bold', 'Custom lettering', 'Serif', 'All-caps'],
     tip: '"Add a semibold wordmark at 18–22px next to the logomark. Keep it in the brand primary color or white."',
     category: 'navigation',
@@ -386,7 +386,7 @@ export const COMPONENTS = {
   'bento-grid': {
     name: 'Bento Grid',
     also: ['Feature Grid', 'Mixed Grid', 'Asymmetric Grid', 'Dashboard Grid'],
-    desc: 'A grid layout with cards of varying sizes — some span 2 columns or 2 rows — creating a visually dynamic feature showcase.',
+    desc: 'A grid layout with cards of varying sizes. Some span 2 columns or 2 rows, which creates a visually dynamic feature showcase.',
     variants: ['2×2 with 1 large card', '3-column mixed', 'Masonry-style', 'With images', 'Interactive cards'],
     tip: '"Create a bento grid: one large card spanning 2 columns, 2 small cards beside it, then 3 equal cards below."',
     category: 'layout',
@@ -515,6 +515,75 @@ export const COMPONENTS = {
     tip: '"Add a 4px progress bar: rounded ends, gray track, colored fill. Show percentage label above or inline."',
     category: 'feedback',
   },
+  'parallelogram-carousel': {
+    name: 'Parallelogram Carousel',
+    also: ['Skewed Slider', 'Angled Panel Carousel', 'Diagonal Carousel'],
+    desc: 'A carousel of panels skewed with CSS transform (skewX) creating a dramatic parallelogram strip. Clicking a panel expands it. Inner images counter-rotate to stay upright.',
+    variants: ['Horizontal strip', 'Vertical strip', 'With grayscale-to-color transition', 'With logo reveal on active', 'With fog overlay'],
+    tip: '"Create a parallelogram carousel: 5-6 panels with skewX(-20deg), active panel wider (30vw vs 20vw). Images counter-rotate with skewX(20deg). Inactive panels are grayscale with dark overlay."',
+    frameworks: ['Swiper', 'Embla Carousel', 'GSAP', 'CSS transforms'],
+    category: 'layout',
+  },
+  'floating-nav': {
+    name: 'Floating Navigation',
+    also: ['Overlay Nav', 'Absolute Nav', 'Transparent Nav'],
+    desc: 'Navigation positioned absolutely over hero/full-viewport content with no background. Floats above immersive content without competing for vertical space.',
+    variants: ['Top-right links', 'Centered', 'With animated entrance', 'With scroll-triggered background', 'Logo left + links right'],
+    tip: '"Position the nav absolutely at top with transparent background. White text, z-index above hero. Add a subtle background on scroll for readability."',
+    category: 'navigation',
+  },
+  'fog-overlay': {
+    name: 'Fog Overlay',
+    also: ['Atmospheric Overlay', 'Particle Layer', 'Ambient Animation', 'Mist Effect'],
+    desc: 'Animated translucent layers simulating fog, mist, or particles floating across a section. Creates cinematic depth and atmosphere on dark backgrounds.',
+    variants: ['Horizontal scroll loop', 'Radial fade', 'Multi-layer parallax', 'Particle system', 'Rising mist'],
+    tip: '"Add 2-3 fog layers with different speeds and opacities. Use CSS keyframes for horizontal drift. Stack with z-index for depth. Works best on dark backgrounds."',
+    frameworks: ['CSS Keyframes', 'Three.js', 'particles.js', 'GSAP'],
+    category: 'media',
+  },
+  'game-logo': {
+    name: 'Game / Title Logo',
+    also: ['Title Card', 'Product Logo', 'Hero Logo Mark', 'Splash Logo'],
+    desc: 'A large decorative product or game logo overlaid on the hero area. Fades in with entrance animation on the active slide or on page load.',
+    variants: ['Centered fade-in', 'Slide-up reveal', 'With subtitle text', 'Animated entrance (multi-step)', 'With platform icons below'],
+    tip: '"Place a large product logo (SVG or PNG, 40-60% width) centered on the hero panel. Animate with translateY and opacity on reveal. Use background-size: contain."',
+    category: 'media',
+  },
+  'tilt-card': {
+    name: 'Tilt Card',
+    also: ['3D Card', 'Perspective Card', 'Hover Tilt', 'Vanilla Tilt Card'],
+    desc: 'A card with a 3D perspective tilt effect on hover. Mouse position drives the rotation angles, creating a parallax depth feel.',
+    variants: ['Subtle (5deg)', 'Dramatic (15deg)', 'With glare effect', 'With floating inner elements', 'With scale on hover'],
+    tip: '"Add a 3D tilt effect on hover: track mouse position, apply rotateX/rotateY based on cursor offset from card center. Max 10deg rotation, smooth transition on leave."',
+    frameworks: ['Vanilla Tilt', 'React Tilt', 'GSAP', 'CSS perspective + :hover'],
+    category: 'layout',
+  },
+  'odometer-counter': {
+    name: 'Odometer Counter',
+    also: ['Animated Counter', 'Rolling Number', 'Count-Up', 'Scroll Counter'],
+    desc: 'A number that animates from 0 to its target value when scrolled into view. Uses rolling digit animation (odometer style) for dramatic effect.',
+    variants: ['Simple count-up', 'Rolling digits', 'With suffix (+, %, K)', 'Triggered on scroll', 'With label below'],
+    tip: '"Use an odometer counter for key metrics. Trigger animation on viewport entry with IntersectionObserver. Roll from 0 to target over 2s. Add suffix like + or % after the number."',
+    frameworks: ['Odometer.js', 'CountUp.js', 'GSAP', 'Framer Motion'],
+    category: 'content',
+  },
+  'masonry-grid': {
+    name: 'Masonry Grid',
+    also: ['Pinterest Grid', 'Waterfall Layout', 'Isotope Grid', 'Packery Layout'],
+    desc: 'A grid where items have varying heights and are packed without fixed rows, like a brick wall. Items fill vertical gaps naturally.',
+    variants: ['2-column', '3-column', '4-column', 'With category filter buttons', 'With animated layout transitions', 'Infinite scroll load'],
+    tip: '"Create a masonry grid: use CSS columns or a library like Masonry.js. Add filter buttons above to toggle categories with smooth layout transition."',
+    frameworks: ['Masonry.js', 'Isotope', 'CSS columns', 'React Masonry CSS', 'Packery'],
+    category: 'layout',
+  },
+  'scroll-indicator': {
+    name: 'Scroll Indicator',
+    also: ['Scroll Down Prompt', 'Scroll Arrow', 'Scroll Cue', 'Mouse Scroll Icon'],
+    desc: 'A visual prompt (arrow, mouse icon, or text) at the bottom of the hero section indicating the page is scrollable. Often animated with a bounce or fade loop.',
+    variants: ['Arrow down', 'Mouse icon with scroll dot', '"Scroll Down" text + arrow', 'Bouncing chevron', 'Line extending downward'],
+    tip: '"Add a scroll indicator at the bottom of the hero: a small mouse icon with animated dot, or a bouncing chevron. Fade out after first scroll."',
+    category: 'navigation',
+  },
 };
 
 // Which components appear in each layout (determines browser list)
@@ -538,6 +607,8 @@ export const LAYOUT_COMPONENTS = {
   docs:         ['navbar','logo','logomark','wordmark','nav-link','search-bar','breadcrumb','sidebar-nav','section-header','headline','subheadline','tab-bar','divider','pagination','footer'],
   healthcare:   ['navbar','logo','logomark','wordmark','nav-link','hamburger','search-hero','search-bar','hero-section','headline','subheadline','carousel','team-card','avatar','badge','cta-button','logo-bar','map-placeholder','form','input-field','section-header','stat-block','footer','social-icons'],
   guild:        ['navbar','logo','logomark','wordmark','hero-section','headline','subheadline','stat-block','tab-bar','select-field','badge','card','cta-button','ghost-button','avatar','progress-bar','modal','form','textarea'],
+  gamestudio:   ['floating-nav','logo','nav-link','hero-section','parallelogram-carousel','hero-image','game-logo','fog-overlay','headline','social-icons','footer'],
+  figureportfolio: ['floating-nav','logo','nav-link','cta-button','hero-section','headline','subheadline','odometer-counter','tilt-card','thumbnail','scroll-indicator','section-header','masonry-grid','article-card','testimonial-card','avatar','form','input-field','textarea','footer','social-icons'],
 };
 
 export const LAYOUTS = [
@@ -563,6 +634,8 @@ export const LAYOUTS = [
   { id: 'docs',        label: 'Documentation',     category: 'industry', parentType: 'blog' },
   { id: 'healthcare',  label: 'Healthcare',        category: 'industry', parentType: 'corporate' },
   { id: 'guild',       label: 'Guild Board',       category: 'industry', parentType: 'landing' },
+  { id: 'gamestudio',  label: 'Game Studio',       category: 'industry', parentType: 'landing' },
+  { id: 'figureportfolio', label: 'Figure Portfolio', category: 'industry', parentType: 'portfolio' },
 ];
 
 // Common Mistakes Data for Mistakes Reference Layout
@@ -842,7 +915,7 @@ export const PROMPT_LIBRARY = [
       {
         industry: 'ecommerce',
         title: 'Full Product Card',
-        prompt: 'Create a comprehensive ecommerce product card: (1) Product image with "New" badge in top-left, (2) Hover to show secondary product image, (3) Wishlist heart icon top-right, (4) Star rating with review count, (5) Product name truncated to 2 lines, (6) Current price large, original price with strikethrough, (7) "Add to Cart" button with loading state, (8) Quick view button on hover showing modal preview. Card should have smooth hover animation with subtle lift and shadow.'
+        prompt: 'Create a full ecommerce product card: (1) Product image with "New" badge in top-left, (2) Hover to show secondary product image, (3) Wishlist heart icon top-right, (4) Star rating with review count, (5) Product name truncated to 2 lines, (6) Current price large, original price with strikethrough, (7) "Add to Cart" button with loading state, (8) Quick view button on hover showing modal preview. Card should have smooth hover animation with subtle lift and shadow.'
       },
       {
         industry: 'ecommerce',
@@ -956,7 +1029,7 @@ export const CHECKLIST_CATEGORIES = {
 
 export const CHECKLIST_ITEMS = [
   // SEO & Metadata
-  { id: 'title', category: 'seo', label: 'Page title (<title> tag)', desc: 'Unique, descriptive title under 60 characters', tip: 'Add <title>Your Brand — Short Value Prop</title> in <head>. Keep under 60 chars to avoid truncation in search results.' },
+  { id: 'title', category: 'seo', label: 'Page title (<title> tag)', desc: 'Unique, descriptive title under 60 characters', tip: 'Add <title>Your Brand: Short Value Prop</title> in <head>. Keep under 60 chars to avoid truncation in search results.' },
   { id: 'meta-desc', category: 'seo', label: 'Meta description', desc: 'Compelling summary under 160 characters', tip: 'Add <meta name="description" content="..."> in <head>. Write 150-160 chars. This appears in search results under your title.' },
   { id: 'og-title', category: 'seo', label: 'Open Graph title', desc: 'Title shown when shared on social media', tip: 'Add <meta property="og:title" content="Your Title">. Can be same as page title or slightly different for social context.' },
   { id: 'og-desc', category: 'seo', label: 'Open Graph description', desc: 'Description for social media previews', tip: 'Add <meta property="og:description" content="...">. Can be same as meta description or tailored for social sharing.' },

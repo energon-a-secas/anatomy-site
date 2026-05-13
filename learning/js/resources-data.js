@@ -136,7 +136,7 @@ export const RESOURCE_ITEMS = [
     id: 'realfavicongenerator',
     category: 'favicon',
     label: 'RealFaviconGenerator.net',
-    desc: 'Most comprehensive favicon generator',
+    desc: 'Favicon generator with many format options',
     tip: 'Upload PNG/SVG and get all favicon formats: ICO, PNG, SVG, webmanifest. Includes apple-touch-icon, browserconfig.xml. Most complete solution available.'
   },
   {

@@ -10,5 +10,8 @@ blob-report/
 node_modules/
 package-lock.json
 
+# ── Blueprints (design reference docs) ───────────────────────────────────────
+blueprints/
+
 # ── macOS metadata (binary, not useful to read) ───────────────────────────────
 .DS_Store

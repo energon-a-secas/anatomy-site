@@ -1,3 +1,7 @@
+export function prefersReducedMotion() {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function debounce(fn, ms) {
   let timer;
   return (...args) => {

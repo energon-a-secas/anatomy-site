@@ -22,14 +22,4 @@ export function initResourceEvents() {
   if (searchInput) {
     searchInput.addEventListener('input', debounce(handleSearch, 200));
   }
-
-  // Add click handlers for resource cards
-  document.addEventListener('click', (e) => {
-    const card = e.target.closest('.resource-card');
-    if (card) {
-      const label = card.querySelector('.resource-label').textContent;
-      // Could add analytics or copy-to-clipboard here
-      console.log('Resource clicked:', label);
-    }
-  });
 }

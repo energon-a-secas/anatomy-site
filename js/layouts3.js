@@ -4,7 +4,7 @@
 import { makeHelpers, sharedNavbar, sharedFooter, featureGrid } from './layouts.js';
 
 // ── Agency Portfolio ─────────────────────────────────────────────────────────
-// parentType: portfolio — Pentagram/IDEO-style minimal design agency
+// parentType: portfolio; Pentagram/IDEO-style minimal design agency
 export function agencyLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
 
@@ -41,9 +41,9 @@ export function agencyLayout(opts = {}) {
 
     <!-- Full-screen case study cards stacked vertically -->
     <div class="wf-comp" data-comp="hero-section" style="padding:0">
-      ${caseStudyRow('E-commerce Reimagined', 'Shopify — 2024', ['Branding', 'UX'], true)}
-      ${caseStudyRow('Brand Identity System', 'Stripe — 2024', ['Identity', 'Print'], false)}
-      ${caseStudyRow('Mobile Experience', 'Headspace — 2023', ['iOS', 'Motion'], true)}
+      ${caseStudyRow('E-commerce Reimagined', 'Shopify, 2024', ['Branding', 'UX'], true)}
+      ${caseStudyRow('Brand Identity System', 'Stripe, 2024', ['Identity', 'Print'], false)}
+      ${caseStudyRow('Mobile Experience', 'Headspace, 2023', ['iOS', 'Motion'], true)}
     </div>
 
     <!-- Horizontal scroll team section -->
@@ -94,7 +94,7 @@ export function agencyLayout(opts = {}) {
 }
 
 // ── Photography Portfolio ────────────────────────────────────────────────────
-// parentType: portfolio — image-heavy gallery grid, minimal text
+// parentType: portfolio; image-heavy gallery grid, minimal text
 export function photographyLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
 
@@ -156,7 +156,7 @@ export function photographyLayout(opts = {}) {
 }
 
 // ── Magazine / Media ─────────────────────────────────────────────────────────
-// parentType: blog — multi-column editorial with sidebar, trending, newsletter
+// parentType: blog; multi-column editorial with sidebar, trending, newsletter
 export function magazineLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
 
@@ -260,7 +260,7 @@ export function magazineLayout(opts = {}) {
 }
 
 // ── Documentation Site ───────────────────────────────────────────────────────
-// parentType: blog — sidebar docs navigation, code blocks, TOC
+// parentType: blog; sidebar docs navigation, code blocks, TOC
 export function docsLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
 
@@ -393,7 +393,7 @@ export function docsLayout(opts = {}) {
 }
 
 // ── Healthcare ───────────────────────────────────────────────────────────────
-// parentType: corporate — Zocdoc/One Medical patient-focused, search-first design
+// parentType: corporate; Zocdoc/One Medical patient-focused, search-first design
 export function healthcareLayout(opts = {}) {
   const H = makeHelpers(opts.dummy);
 

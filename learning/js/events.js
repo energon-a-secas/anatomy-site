@@ -4,12 +4,17 @@ import { renderTabs, renderContent, updateChecklistProgress } from './render.js'
 let searchTimer = null;
 const DEBOUNCE_MS = 200;
 
+function syncLearningTabUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.set('tab', state.activeTab);
+  history.replaceState(null, '', url);
+}
+
 export function initEvents() {
   const tabBar = document.getElementById('tabBar');
   const contentArea = document.getElementById('contentArea');
   const searchInput = document.getElementById('searchInput');
 
-  // ── Tab clicks ────────────────────────────────────────────────────────────
   if (tabBar) {
     tabBar.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-tab]');
@@ -19,13 +24,51 @@ export function initEvents() {
       if (searchInput) searchInput.value = '';
       renderTabs();
       renderContent();
+      syncLearningTabUrl();
+      document.getElementById(`learning-tab-${state.activeTab}`)?.focus();
+    });
+
+    tabBar.addEventListener('keydown', (e) => {
+      const el = e.target.closest('[data-tab]');
+      if (!el) return;
+      const tabs = [...tabBar.querySelectorAll('[role="tab"]')];
+      const i = tabs.indexOf(el);
+      if (i < 0) return;
+      let n = i;
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        n = (i + 1) % tabs.length;
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        n = (i - 1 + tabs.length) % tabs.length;
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        n = 0;
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        n = tabs.length - 1;
+      } else {
+        return;
+      }
+      const nextId = tabs[n].dataset.tab;
+      if (!nextId || nextId === state.activeTab) return;
+      state.activeTab = nextId;
+      state.searchQuery = '';
+      if (searchInput) searchInput.value = '';
+      renderTabs();
+      renderContent();
+      syncLearningTabUrl();
+      document.getElementById(`learning-tab-${nextId}`)?.focus();
     });
   }
 
-  // ── Content area delegation ───────────────────────────────────────────────
   if (contentArea) {
-    // Checkbox changes (checklist)
     contentArea.addEventListener('change', (e) => {
+      if (e.target.id === 'industryFilter') {
+        state.industryFilter = e.target.value;
+        renderContent();
+        return;
+      }
       if (e.target.type !== 'checkbox') return;
       const id = e.target.dataset.id;
       if (!id) return;
@@ -43,7 +86,6 @@ export function initEvents() {
       updateChecklistProgress();
     });
 
-    // Category collapse toggle (checklist)
     contentArea.addEventListener('click', (e) => {
       const header = e.target.closest('.checklist-category-header');
       if (header) {
@@ -55,45 +97,38 @@ export function initEvents() {
         return;
       }
 
-      // Copy prompt button
       const copyBtn = e.target.closest('.prompt-copy-btn');
       if (copyBtn) {
         const text = copyBtn.dataset.prompt;
-        navigator.clipboard.writeText(text).then(() => {
-          copyBtn.classList.add('copied');
-          copyBtn.textContent = 'Copied!';
-          setTimeout(() => {
-            copyBtn.classList.remove('copied');
-            copyBtn.textContent = 'Copy prompt';
-          }, 1500);
-        });
+        if (text) {
+          navigator.clipboard.writeText(text).then(() => {
+            copyBtn.classList.add('copied');
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.textContent = 'Copy prompt';
+            }, 1500);
+          });
+        }
         return;
       }
-    });
 
-    // Industry filter change (prompts)
-    contentArea.addEventListener('change', (e) => {
-      if (e.target.id === 'industryFilter') {
-        state.industryFilter = e.target.value;
-        renderContent();
+      const codeCopyBtn = e.target.closest('.code-copy-btn');
+      if (codeCopyBtn) {
+        const code = codeCopyBtn.dataset.code;
+        if (code) {
+          navigator.clipboard.writeText(code).then(() => {
+            codeCopyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+              codeCopyBtn.textContent = 'Copy Code';
+            }, 1500);
+          });
+        }
       }
     });
 
-    // Copy framework code button
-    const codeCopyBtn = e.target.closest('.code-copy-btn');
-    if (codeCopyBtn) {
-      const code = codeCopyBtn.dataset.code;
-      navigator.clipboard.writeText(code).then(() => {
-        codeCopyBtn.textContent = 'Copied!';
-        setTimeout(() => {
-          codeCopyBtn.textContent = 'Copy Code';
-        }, 1500);
-      });
-      return;
-    }
   }
 
-  // ── Search input ──────────────────────────────────────────────────────────
   if (searchInput) {
     searchInput.addEventListener('input', () => {
       clearTimeout(searchTimer);

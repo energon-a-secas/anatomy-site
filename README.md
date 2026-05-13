@@ -32,7 +32,7 @@ Learn UI component names by hovering a live wireframe mockup
 
 UI Anatomy is an interactive wireframe simulator where hovering any part of a white-outline website mockup reveals the component's name, alternate names, design variants, and a ready-to-use AI prompt tip. It helps developers, designers, and anyone working with AI tools build better prompts by teaching them the vocabulary of UI components.
 
-Five mockup layouts cover the most common site types: Landing Page, Corporate, Startup, Portfolio, and Blog -- each with 15--25 unique hoverable components.
+The app ships many layout families (core site types plus industry templates such as SaaS, ecommerce, and game studio), each exposing a curated set of hover targets. A separate **Learning Hub** (`learning/`) adds checklists, anti-patterns, prompt recipes, and framework notes.
 
 **Live:** anatomy.neorgon.com
 
@@ -40,13 +40,11 @@ Five mockup layouts cover the most common site types: Landing Page, Corporate, S
 
 ## Features
 
-- **5 wireframe layouts** -- Landing Page, Corporate, Startup, Portfolio, Blog; switch with tabs
-- **40+ component definitions** -- name, alternate names, description, variants, and prompt tip per component
-- **Hover to identify** -- hover any element in the mockup to see its full component profile in a tooltip
-- **Component browser** -- searchable sidebar listing all components in the active layout by category
-- **Show outlines mode** -- toggle to reveal all component boundaries at once for quick scanning
-- **Bidirectional sync** -- hovering a component highlights it in the browser; clicking a browser item scrolls to and highlights it in the mockup
-- **Prompt tips** -- every component includes a copy-ready example prompt phrase to use with AI design tools
+- **Wireframe explorer**: multiple layouts; hover any region to see its UI vocabulary, variants, and prompt tips
+- **50+ component definitions**: name, alternate names, description, variants, and prompt tip per component (see JSON glossary export in the site footer)
+- **Component browser**: searchable sidebar for the active layout; syncs with hover and scroll-to-target
+- **Learning Hub**: production checklist (with local progress), common mistakes, AI prompt guide, patterns, design systems, accessibility notes, architecture matrix, and framework code snippets
+- **Deep links**: `?layout=` and `?comp=` on the home app; `?tab=` on the learning hub for shareable views
 
 ---
 
@@ -70,24 +68,29 @@ Then open [http://localhost:8820](http://localhost:8820).
 
 ```
 anatomy-site/
-├── index.html              # App shell (~90 lines)
+├── index.html              # Wireframe app shell + JSON-LD
+├── learning/               # Learning Hub (tabs, checklist, prompts, …)
+│   ├── index.html
+│   ├── hosting-resources.html
+│   ├── frameworks-decision-guide.html  # Renders frameworks-decision-guide.md
+│   ├── frameworks-decision-guide.md
+│   ├── css/style.css
+│   └── js/ …
 ├── css/
-│   └── style.css           # All styles: Neorgon dark theme + wireframe elements
+│   └── style.css           # Wireframe app styles
 ├── js/
-│   ├── app.js              # Entry point, wires up render + events
+│   ├── app.js              # Entry: ?layout=, ?comp=, wiring
 │   ├── state.js            # Active layout, hovered comp, toggles
-│   ├── data.js             # 40+ component definitions + layout component lists
-│   ├── layouts.js          # 5 wireframe HTML template functions
-│   ├── render.js           # renderTabs, renderMockup, renderBrowser, tooltip
-│   ├── events.js           # Hover, click, search, outlines + browser toggles
-│   └── utils.js            # debounce, escHtml
+│   ├── data.js             # Component map + layout → component ids + layouts list
+│   ├── layouts*.js         # Wireframe HTML generators
+│   ├── render.js           # Layout nav, mockup, browser, tooltip
+│   ├── events.js           # Interactions + glossary export
+│   └── utils.js            # debounce, escHtml, prefersReducedMotion
 ├── docs/
-│   ├── architecture.mmd    # Mermaid source
-│   └── architecture.svg    # Generated diagram
-├── favicon.ico
-├── energon-classic-logo.png
-├── CNAME                   # anatomy.neorgon.com
-├── Makefile                # make serve (port 8820), make kill
+│   ├── architecture.mmd
+│   └── architecture.svg
+├── CNAME
+├── Makefile
 ├── robots.txt
 └── sitemap.xml
 ```

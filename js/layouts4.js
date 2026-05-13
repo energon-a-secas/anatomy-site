@@ -156,7 +156,7 @@ export function saasLayout(opts = {}) {
         ${H.lw(340, 36, 'Your workspace, reimagined')}
       </div>
       <div class="wf-comp" data-comp="subheadline" style="display:flex;flex-direction:column;gap:6px;align-items:center">
-        ${H.lw(320, 10, 'Docs, databases, and workflows — all in one place.')}
+        ${H.lw(320, 10, 'Docs, databases, and workflows in one place.')}
         ${H.lw(280, 10, 'Replace 5 tools with one. Free for individuals.')}
       </div>
       <div style="display:flex;gap:8px;margin-top:6px;width:100%;max-width:400px">
@@ -212,10 +212,10 @@ export function saasLayout(opts = {}) {
           </tr>
         </thead>
         <tbody>
-          ${[['Workspaces','1','Unlimited','Unlimited'],['Members','5','50','Unlimited'],['Storage','2 GB','100 GB','Custom'],['API Access','—','✓','✓'],['SSO / SAML','—','—','✓'],['Priority Support','—','✓','✓']].map(([f,...vals]) => `
+          ${[['Workspaces','1','Unlimited','Unlimited'],['Members','5','50','Unlimited'],['Storage','2 GB','100 GB','Custom'],['API Access','-','✓','✓'],['SSO / SAML','-','-','✓'],['Priority Support','-','✓','✓']].map(([f,...vals]) => `
           <tr style="border-bottom:1px solid #f3f4f6">
             <td style="padding:10px 16px;color:#6b7280">${f}</td>
-            ${vals.map(v => `<td style="padding:10px 16px;text-align:center;color:${v === '—' ? '#d1d5db' : v === '✓' ? '#059669' : '#374151'}">${v}</td>`).join('')}
+            ${vals.map(v => `<td style="padding:10px 16px;text-align:center;color:${v === '-' ? '#d1d5db' : v === '✓' ? '#059669' : '#374151'}">${v}</td>`).join('')}
           </tr>`).join('')}
         </tbody>
       </table>
@@ -225,7 +225,7 @@ export function saasLayout(opts = {}) {
   <!-- Social proof ticker -->
   <div class="wf-comp" data-comp="news-ticker" style="background:#f9fafb;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb;padding:16px 32px;overflow:hidden">
     <div style="display:flex;gap:48px;align-items:center;white-space:nowrap;animation:none">
-      ${['"Replaced 5 tools overnight." — Sarah K.','"Our team productivity doubled." — Dev Team at Bloom','"Best workspace app of 2025." — TechRadar','"Finally, one tool to rule them all." — James P.'].map(q => `
+      ${['"Replaced 5 tools overnight." (Sarah K.)','"Our team productivity doubled." (Dev Team at Bloom)','"Best workspace app of 2025." (TechRadar)','"Finally, one tool to rule them all." (James P.)'].map(q => `
       <div style="display:flex;align-items:center;gap:8px">
         ${H.avatarEl(24)}
         <span style="font-size:13px;color:#6b7280;font-style:italic;font-family:-apple-system,sans-serif">${q}</span>

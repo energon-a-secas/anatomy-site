@@ -184,7 +184,7 @@ export function landingLayout(opts = {}) {
     </div>
     <div class="wf-testimonial-grid">
       ${[['This changed how our team works. We ship twice as fast and actually enjoy the process now.','Sarah Chen','CTO at Acme Corp'],
-         ['The onboarding was seamless and the support team is incredible. Highly recommend.','Marcus Webb','VP Engineering, TechFlow']].map(([q,n,c]) => `
+         ['The onboarding was smooth and the support team is incredible. Highly recommend.','Marcus Webb','VP Engineering, TechFlow']].map(([q,n,c]) => `
       <div class="wf-comp" data-comp="testimonial-card">
         <div class="wf-testimonial-inner">
           <div class="wf-stars">${Array(5).fill('<div class="wf-star"></div>').join('')}</div>
@@ -412,7 +412,7 @@ export function startupLayout(opts = {}) {
 
   <div class="wf-comp" data-comp="hero-section" style="padding:52px 32px 44px;background:#0a0a0a;text-align:center">
     <div style="display:flex;flex-direction:column;align-items:center;gap:14px;max-width:560px;margin:0 auto">
-      <div class="wf-comp" data-comp="badge">${H.bdg('v2.0 — Now available')}</div>
+      <div class="wf-comp" data-comp="badge">${H.bdg('v2.0: Now available')}</div>
       <div class="wf-comp" data-comp="headline" style="display:flex;flex-direction:column;gap:6px;align-items:center">
         ${opts.dummy
           ? `<span style="font-size:34px;font-weight:700;line-height:1.15;font-family:-apple-system,sans-serif;background:linear-gradient(135deg,#a78bfa,#818cf8,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Build at the speed</span>

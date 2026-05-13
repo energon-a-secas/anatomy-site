@@ -1,10 +1,12 @@
 import { state } from './state.js';
 import { COMPONENTS, CATEGORIES, LAYOUT_COMPONENTS, LAYOUTS, HERO_BACKGROUNDS } from './data.js';
+import { escHtml } from './utils.js';
 import { landingLayout, corporateLayout, startupLayout } from './layouts.js';
 import { portfolioLayout, blogLayout, componentsLayout, loginLayout, ecommerceLayout, linkinbioLayout } from './layouts2.js';
 import { agencyLayout, photographyLayout, magazineLayout, docsLayout, healthcareLayout } from './layouts3.js';
 import { fortuneLayout, saasLayout, fintechLayout, gamingLayout } from './layouts4.js';
 import { guildLayout } from './layouts5.js';
+import { gamestudioLayout, figureportfolioLayout } from './layouts6.js';
 
 const LAYOUT_FNS = {
   landing:    landingLayout,
@@ -26,6 +28,8 @@ const LAYOUT_FNS = {
   docs:       docsLayout,
   healthcare: healthcareLayout,
   guild:      guildLayout,
+  gamestudio: gamestudioLayout,
+  figureportfolio: figureportfolioLayout,
 };
 
 // ── Layout navigation (dropdown categories) ───────────────────────────────────
@@ -50,16 +54,16 @@ export function renderLayoutNav() {
 
     return `
       <div class="layout-dropdown">
-        <button class="layout-dropdown-btn ${isActive ? 'active' : ''}" data-category="${catId}" aria-expanded="false">
+        <button type="button" class="layout-dropdown-btn ${isActive ? 'active' : ''}" data-category="${catId}" aria-expanded="false" aria-haspopup="true" aria-controls="layout-menu-${catId}">
           ${buttonLabel}
-          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12">
+          <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
             <path fill="currentColor" d="M2 4l4 4 4-4"/>
           </svg>
         </button>
-        <div class="layout-dropdown-menu" data-category="${catId}" role="menu">
+        <div class="layout-dropdown-menu" id="layout-menu-${catId}" data-category="${catId}" role="menu">
           ${layouts.map(l => {
             return `
-            <button class="layout-dropdown-item ${state.activeLayout === l.id ? 'active' : ''}"
+            <button type="button" class="layout-dropdown-item ${state.activeLayout === l.id ? 'active' : ''}"
                     data-layout="${l.id}" role="menuitemradio" aria-checked="${state.activeLayout === l.id}">
               ${l.label}
             </button>
@@ -101,8 +105,9 @@ export function renderHeroBgPicker() {
     const style  = isGrad ? `background:${bg.swatch}`
                  : isImg  ? `background:${bg.swatch} center/cover,#e5e7eb`
                  :          `background:${bg.swatch};border:1px solid #d1d5db`;
-    return `<button class="hero-bg-swatch${state.heroBg === bg.id ? ' active' : ''}"
-                    data-bg="${bg.id}" title="${bg.label}"
+    return `<button type="button" class="hero-bg-swatch${state.heroBg === bg.id ? ' active' : ''}"
+                    data-bg="${bg.id}" title="${escHtml(bg.label)}" aria-label="${escHtml(bg.label)}"
+                    aria-pressed="${state.heroBg === bg.id}"
                     style="${style}"></button>`;
   }).join('');
 }
@@ -161,10 +166,13 @@ export function renderBrowser() {
       // Add badge when searching
       const badgeHtml = isSearching ? `<span class="browser-item-badge">${catLabel}</span>` : '';
 
+      const safeTitle = escHtml(title).replace(/\n/g, ' ');
       html += `<div class="browser-item${item.present ? '' : ' missing'}${state.activeComp === item.id ? ' active' : ''}${isSearching ? ' grid-item' : ''}"
                    data-comp-id="${item.id}"
                    data-found-in="${item.foundIn.join(',')}"
-                   title="${title}">
+                   role="button"
+                   tabindex="0"
+                   title="${safeTitle}">
         <div class="browser-dot"></div>
         ${item.name}
         ${!item.present && item.foundIn.length > 0 ? '<span class="browser-switch-hint">→</span>' : ''}
@@ -228,16 +236,23 @@ export function showTooltip(compId, triggerEl) {
     tt.classList.remove('pinned');
   }
 
+  const live = document.getElementById('anatomyLive');
+  if (live && state.pinnedComp === compId) {
+    const cat = CATEGORIES[comp.category] || comp.category;
+    live.textContent = `${comp.name}, ${cat}. ${comp.desc}`;
+  }
+
   positionTooltip(tt, triggerEl);
 }
 
 export function hideTooltip() {
   const tt = document.getElementById('tooltip');
   if (!tt) return;
-  // Don't hide if tooltip is pinned
   if (state.pinnedComp !== null) return;
   tt.classList.add('hidden');
   tt.classList.remove('pinned');
+  const live = document.getElementById('anatomyLive');
+  if (live) live.textContent = '';
 }
 
 export function togglePinTooltip(compId) {
